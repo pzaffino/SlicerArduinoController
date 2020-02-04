@@ -1,7 +1,7 @@
 import os
 import unittest
 import vtk, qt, ctk, slicer
-from self.ScriptedLoadableModule import *
+from slicer.ScriptedLoadableModule import *
 import logging
 
 #
@@ -44,12 +44,12 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.logic = ArduinoConnectLogic()
 
     # Load widget from .ui file (created by Qt Designer)
-    uiWidget = self.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
+    uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
     self.layout.addWidget(uiWidget)
-    self.ui = self.util.childWidgetVariables(uiWidget)
+    self.ui = slicer.util.childWidgetVariables(uiWidget)
 
     # connections
-    self.ui.applyButton.connect('toggled(bool)', self.onConnectButton)
+    self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -59,6 +59,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
   def onApplyButton(self, toggle):
     if toggle:
+      print(self.ui.portSelectorComboBox.currentText)
       self.logic.connect(self.ui.portSelectorComboBox.currentText)
     else:
       self.logic.disconnect()
@@ -77,7 +78,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
 
-  def connect(port):
+  def connect(self, port):
       import serial
       self.arduino = serial.Serial(port, 9600)
       self.arduinoEndOfLine = '\n'
@@ -86,11 +87,11 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       self.arduinoEnabled = True
       qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
-  def disconnect():
+  def disconnect(self):
       self.arduinoEnabled = False
       self.arduino.close()
 
-  def pollSerialDevice():
+  def pollSerialDevice(self):
       self.arduinoReceiveBuffer += self.arduino.readline().decode('ascii')
       if self.arduinoEndOfLine in self.arduinoReceiveBuffer:
           messages = self.arduinoReceiveBuffer.split(self.arduinoEndOfLine)
@@ -100,7 +101,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       if self.arduinoEnabled:
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
-  def processMessage(msg):
+  def processMessage(self, msg):
       print(msg)
 
 
@@ -146,7 +147,7 @@ class ArduinoConnectTest(ScriptedLoadableModuleTest):
       checksums='SHA256:12d17fba4f2e1f1a843f0757366f28c3f3e1a8bb38836f0de2a32bb1cd476560')
     self.delayDisplay('Finished with download and loading')
 
-    volumeNode = self.util.getNode(pattern="FA")
+    volumeNode = slicer.util.getNode(pattern="FA")
     logic = ArduinoConnectLogic()
     self.assertIsNotNone( logic.hasImageData(volumeNode) )
     self.delayDisplay('Test passed!')
