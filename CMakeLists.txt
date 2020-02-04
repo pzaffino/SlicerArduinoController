@@ -6,10 +6,10 @@ project(ArduinoController)
 # Extension meta-information
 set(EXTENSION_HOMEPAGE "http://slicer.org/slicerWiki/index.php/Documentation/Nightly/Extensions/ArduinoController")
 set(EXTENSION_CATEGORY "Developer Tools")
-set(EXTENSION_CONTRIBUTORS "John Doe (AnyWare Corp.)")
+set(EXTENSION_CONTRIBUTORS "Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Domenico Leuzzi (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy), Andras Lasso (PerkLab, Queen's), Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)")
 set(EXTENSION_DESCRIPTION "Extension for 3D Slicer that allows controlling Slicer using Arduino devices.")
-set(EXTENSION_ICONURL "http://www.example.com/Slicer/Extensions/ArduinoController.png")
-set(EXTENSION_SCREENSHOTURLS "http://www.example.com/Slicer/Extensions/ArduinoController/Screenshots/1.png")
+set(EXTENSION_ICONURL "https://raw.githubusercontent.com/pzaffino/SlicerArduinoController/master/ArduinoController.png")
+set(EXTENSION_SCREENSHOTURLS "https://raw.githubusercontent.com/pzaffino/SlicerArduinoController/master/ArduinoController_screenshot.png")
 set(EXTENSION_DEPENDS "NA") # Specified as a space separated string, a list or 'NA' if any
 
 #-----------------------------------------------------------------------------

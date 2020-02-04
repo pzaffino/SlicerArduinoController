@@ -15,19 +15,15 @@ class ArduinoConnect(ScriptedLoadableModule):
 
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
-    self.parent.title = "ArduinoConnect" # TODO make this more human readable by adding spaces
+    self.parent.title = "Arduino Connect" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Developer Tools"]
     self.parent.dependencies = []
-    self.parent.contributors = ["John Doe (AnyWare Corp.)"] # replace with "Firstname Lastname (Organization)"
+    self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Domenico Leuzzi (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy), Andras Lasso (PerkLab, Queen's), Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
     self.parent.helpText = """
-This is an example of scripted loadable module bundled in an extension.
-It performs a simple thresholding on the input volume and optionally captures a screenshot.
+    This module allows to connect and transmit/receive data from Arduino board. On top of this users can build applications.
 """
     self.parent.helpText += self.getDefaultModuleDocumentationLink()
-    self.parent.acknowledgementText = """
-This file was originally developed by Jean-Christophe Fillion-Robin, Kitware Inc.
-and Steve Pieper, Isomics, Inc. and was partially funded by NIH grant 3P41RR013218-12S1.
-""" # replace with organization, grant and thanks.
+    self.parent.acknowledgementText = """ """ # replace with organization, grant and thanks.
 
 #
 # ArduinoConnectWidget
@@ -59,7 +55,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
   def onApplyButton(self, toggle):
     if toggle:
-      print(self.ui.portSelectorComboBox.currentText)
       self.logic.connect(self.ui.portSelectorComboBox.currentText)
     else:
       self.logic.disconnect()
