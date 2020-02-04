@@ -1,2 +1,3 @@
 # SlicerArduinoController
-Extension for 3D Slicer that allows controlling Slicer using Arduino devices
+Extension for 3D Slicer that allows connecting and receiving/sending data from/to Arduino boards.
+Data can be used to control Slicer (e.g. modifying scene appearance) by means of data coming from externals sensors, or to control external devices on basis of data coming from Slicer.
