@@ -18,7 +18,7 @@ class ArduinoConnect(ScriptedLoadableModule):
     self.parent.title = "Arduino Connect" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Developer Tools"]
     self.parent.dependencies = []
-    self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Domenico Leuzzi (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy), Andras Lasso (PerkLab, Queen's), Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
+    self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Domenico Leuzzi (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy)", "Andras Lasso (PerkLab, Queen's)", "Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
     self.parent.helpText = """
     This module allows to connect and transmit/receive data from Arduino board. On top of this users can build applications.
 """
