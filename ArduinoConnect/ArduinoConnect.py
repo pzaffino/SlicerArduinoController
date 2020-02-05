@@ -25,6 +25,14 @@ class ArduinoConnect(ScriptedLoadableModule):
     self.parent.helpText += self.getDefaultModuleDocumentationLink()
     self.parent.acknowledgementText = """ """ # replace with organization, grant and thanks.
 
+    # If needed install serial pylibrary before imporing. If already installed, just import it.
+    try:
+      import serial
+    except ModuleNotFoundError:
+      slicer.util.pip_install("pyserial")
+      import serial
+
+
 #
 # ArduinoConnectWidget
 #
