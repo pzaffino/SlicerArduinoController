@@ -64,8 +64,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def onApplyButton(self, toggle):
     if toggle:
       self.logic.connect(self.ui.portSelectorComboBox.currentText)
+      self.ui.applyButton.setText("Disconnect")
     else:
       self.logic.disconnect()
+      self.ui.applyButton.setText("Connect")
 
 #
 # ArduinoConnectLogic
@@ -84,28 +86,28 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   def connect(self, port):
       import serial
       self.arduino = serial.Serial(port, 9600)
+      slicer.arduinoData = []
       self.arduinoEndOfLine = '\n'
       self.arduinoRefreshRateFps = 10.0
-      self.arduinoReceiveBuffer = ""
-      self.arduinoEnabled = True
       qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
   def disconnect(self):
-      self.arduinoEnabled = False
       self.arduino.close()
 
   def pollSerialDevice(self):
-      self.arduinoReceiveBuffer += self.arduino.readline().decode('ascii')
-      if self.arduinoEndOfLine in self.arduinoReceiveBuffer:
-          messages = self.arduinoReceiveBuffer.split(self.arduinoEndOfLine)
-          self.processMessage(messages[0])
-          if len(messages) > 1:
-              self.arduinoReceiveBuffer = self.arduinoEndOfLine.join(messages[1:-1])
-      if self.arduinoEnabled:
+      if self.arduino.isOpen():
+          arduinoReceiveBuffer = self.arduino.readline().decode('ascii')
+          if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
+              message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
+              message = self.processMessage(message)
+              if len(message) >= 1:
+                  #slicer.arduinoData.append(message)
+                  slicer.arduinoData = message
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+          print(slicer.arduinoData)
 
   def processMessage(self, msg):
-      print(msg)
+      return msg
 
 
 class ArduinoConnectTest(ScriptedLoadableModuleTest):

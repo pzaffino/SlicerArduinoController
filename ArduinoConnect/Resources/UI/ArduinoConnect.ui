@@ -40,6 +40,11 @@
        <string>/dev/ttyACM0</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>/dev/ttyACM1</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
