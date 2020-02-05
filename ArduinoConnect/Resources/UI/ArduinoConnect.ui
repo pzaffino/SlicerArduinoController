@@ -52,6 +52,9 @@
      <property name="toolTip">
       <string>Run the algorithm.</string>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: grergb(241, 241, 241)y;</string>
+     </property>
      <property name="text">
       <string>Connect</string>
      </property>

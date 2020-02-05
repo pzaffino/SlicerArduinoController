@@ -65,9 +65,11 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     if toggle:
       self.logic.connect(self.ui.portSelectorComboBox.currentText)
       self.ui.applyButton.setText("Disconnect")
+      self.ui.applyButton.setStyleSheet("background-color:#ff0000")
     else:
       self.logic.disconnect()
       self.ui.applyButton.setText("Connect")
+      self.ui.applyButton.setStyleSheet("background-color:#f1f1f1;")
 
 #
 # ArduinoConnectLogic
