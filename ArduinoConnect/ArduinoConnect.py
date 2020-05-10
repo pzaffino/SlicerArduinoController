@@ -51,10 +51,11 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
     self.layout.addWidget(uiWidget)
     self.ui = slicer.util.childWidgetVariables(uiWidget)
+  
 
     # connections
     self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
-
+       
     # Add vertical spacer
     self.layout.addStretch(1)
 
@@ -63,13 +64,14 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
   def onApplyButton(self, toggle):
     if toggle:
-      self.logic.connect(self.ui.portSelectorComboBox.currentText)
+      self.logic.connect(self.ui.portSelectorComboBox.currentText, self.ui.baudSelectorComboBox.currentText)
       self.ui.applyButton.setText("Disconnect")
       self.ui.applyButton.setStyleSheet("background-color:#ff0000")
     else:
       self.logic.disconnect()
       self.ui.applyButton.setText("Connect")
       self.ui.applyButton.setStyleSheet("background-color:#f1f1f1;")
+
 
 #
 # ArduinoConnectLogic
@@ -85,9 +87,9 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
 
-  def connect(self, port):
+  def connect(self, port,baud):
       import serial
-      self.arduino = serial.Serial(port, 9600)
+      self.arduino = serial.Serial(port,baud)
       slicer.arduinoData = []
       self.arduinoEndOfLine = '\n'
       self.arduinoRefreshRateFps = 10.0
