@@ -51,11 +51,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
     self.layout.addWidget(uiWidget)
     self.ui = slicer.util.childWidgetVariables(uiWidget)
-  
 
     # connections
     self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
-       
+
     # Add vertical spacer
     self.layout.addStretch(1)
 
@@ -99,7 +98,9 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       self.arduino.close()
 
   def pollSerialDevice(self):
-      if self.arduino.isOpen():
+      if self.arduino.isOpen() and self.arduino.in_waiting == 0: # No messages from arduino
+          qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+      elif self.arduino.isOpen() and self.arduino.in_waiting > 0: # Some messages from arduino
           arduinoReceiveBuffer = self.arduino.readline().decode('ascii')
           if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
               message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
@@ -107,8 +108,8 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
               if len(message) >= 1:
                   #slicer.arduinoData.append(message)
                   slicer.arduinoData = message
+                  print(slicer.arduinoData)
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-          print(slicer.arduinoData)
 
   def processMessage(self, msg):
       return msg
