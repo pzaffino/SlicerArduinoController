@@ -3,7 +3,7 @@ import unittest
 import vtk, qt, ctk, slicer
 from slicer.ScriptedLoadableModule import *
 import logging
-
+import serial.tools.list_ports
 #
 # ArduinoConnect
 #
@@ -54,6 +54,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
     # connections
     self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
+    self.ui.detectDevice.connect('toggled(bool)', self.Detect_ports) 
+    self.ui.portSelectorComboBox.setEnabled(False)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -63,13 +65,26 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
   def onApplyButton(self, toggle):
     if toggle:
-      self.logic.connect(self.ui.portSelectorComboBox.currentText, self.ui.baudSelectorComboBox.currentText)
+      self.logic.connect(self.ui.portSelectorComboBox.currentText,self.ui.baudSelectorComboBox.currentText)
       self.ui.applyButton.setText("Disconnect")
       self.ui.applyButton.setStyleSheet("background-color:#ff0000")
     else:
       self.logic.disconnect()
       self.ui.applyButton.setText("Connect")
       self.ui.applyButton.setStyleSheet("background-color:#f1f1f1;")
+    
+    
+    
+  def Detect_ports(self):
+    devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
+    self.ui.portSelectorComboBox.clear()
+    if  self.ui.detectDevice.isChecked():
+        self.ui.portSelectorComboBox.setEnabled(True)
+        self.ui.portSelectorComboBox.addItems(devices)
+        
+    else:
+        self.ui.portSelectorComboBox.setEnabled(False)
+    return devices
 
 
 #
