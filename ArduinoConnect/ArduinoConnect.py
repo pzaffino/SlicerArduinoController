@@ -55,7 +55,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     # connections
     self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
     self.ui.detectDevice.connect('clicked(bool)', self.onDetectDeviceButton)
-    self.ui.detectDevice.connect('toggled(bool)', self.detectPorts)
     self.ui.portSelectorComboBox.setEnabled(False)
 
     # Add vertical spacer
@@ -78,11 +77,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     buff=[]
 
     self.ui.portSelectorComboBox.setEnabled(True)
-    devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
-    text=str(devices)
-    buff.append(text)
-
     self.ui.portSelectorComboBox.clear()
+
+    devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
+    buff.append(str(devices))
 
     buff_item = next(iter([devices]))  #View single item in list
 
@@ -95,17 +93,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
     if(devices not in buff):
         self.ui.portSelectorComboBox.addItems(devices)
-
-  def detectPorts(self):
-    devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
-    self.ui.portSelectorComboBox.clear()
-    if  self.ui.detectDevice.isChecked():
-        self.ui.portSelectorComboBox.setEnabled(True)
-        self.ui.portSelectorComboBox.addItems(devices)
-
-    else:
-        self.ui.portSelectorComboBox.setEnabled(False)
-    return devices
 
 #
 # ArduinoConnectLogic
