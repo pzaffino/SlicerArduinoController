@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>126</height>
+    <width>261</width>
+    <height>172</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -19,52 +19,12 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QComboBox" name="portSelectorComboBox">
-     <item>
-      <property name="text">
-       <string>COM1</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>COM2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>COM3</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>COM4</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>/dev/ttyACM0</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>/dev/ttyACM1</string>
-      </property>
-     </item>
-    </widget>
+    <widget class="QComboBox" name="portSelectorComboBox"/>
    </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QPushButton" name="applyButton">
-     <property name="toolTip">
-      <string>Run the algorithm.</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: grergb(241, 241, 241)y;</string>
-     </property>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Connect</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
+      <string>Baud</string>
      </property>
     </widget>
    </item>
@@ -82,10 +42,35 @@
      </item>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="5" column="0" colspan="2">
+    <widget class="QPushButton" name="applyButton">
+     <property name="toolTip">
+      <string>Run the algorithm.</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: grergb(241, 241, 241)y;</string>
+     </property>
      <property name="text">
-      <string>Baud</string>
+      <string>Connect</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QPushButton" name="detectDevice">
+     <property name="toolTip">
+      <string>Detect the device connected</string>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: grergb(241, 241, 241)y;</string>
+     </property>
+     <property name="text">
+      <string>Detect Device</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
