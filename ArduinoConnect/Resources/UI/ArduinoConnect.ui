@@ -63,14 +63,17 @@
      <property name="toolTip">
       <string>Detect the device connected</string>
      </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: grergb(241, 241, 241)y;</string>
      </property>
      <property name="text">
-      <string>Detect Device</string>
+      <string>Detect device(s)</string>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>

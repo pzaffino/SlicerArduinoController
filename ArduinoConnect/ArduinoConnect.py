@@ -54,8 +54,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
     # connections
     self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
-    self.ui.detectDevice.connect('clicked(bool)', self.On_DetectDeviceButton) 
-    self.ui.detectDevice.connect('toggled(bool)', self.Detect_ports) 
+    self.ui.detectDevice.connect('clicked(bool)', self.On_DetectDeviceButton)
+    self.ui.detectDevice.connect('toggled(bool)', self.Detect_ports)
     self.ui.portSelectorComboBox.setEnabled(False)
 
     # Add vertical spacer
@@ -77,25 +77,24 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def On_DetectDeviceButton(self, clicked):
     buff=[]
 
-    if  clicked:
-        self.ui.portSelectorComboBox.setEnabled(True)
-        devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
-        text=str(devices)
-        buff.append(text)
+    self.ui.portSelectorComboBox.setEnabled(True)
+    devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
+    text=str(devices)
+    buff.append(text)
 
-        self.ui.portSelectorComboBox.clear()
-        
-        buff_item = next(iter([devices]))  #View single item in list
-        
-        if(len(buff_item)==0):
-            noDeviceMBox = qt.QMessageBox()
-            noDeviceMBox.setText("Any device has been found!")
-            noDeviceMBox.setIcon(qt.QMessageBox().Warning)
-            noDeviceMBox.setWindowTitle("Ports scan")
-            noDeviceMBox.exec()
-        
-        if(devices not in buff):
-            self.ui.portSelectorComboBox.addItems(devices) 
+    self.ui.portSelectorComboBox.clear()
+
+    buff_item = next(iter([devices]))  #View single item in list
+
+    if(len(buff_item)==0):
+        noDeviceMBox = qt.QMessageBox()
+        noDeviceMBox.setText("Any device has been found!")
+        noDeviceMBox.setIcon(qt.QMessageBox().Warning)
+        noDeviceMBox.setWindowTitle("Ports scan")
+        noDeviceMBox.exec()
+
+    if(devices not in buff):
+        self.ui.portSelectorComboBox.addItems(devices)
 
   def Detect_ports(self):
     devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
