@@ -71,7 +71,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     # connections
     self.ui.portSelectorComboBox.setEnabled(False)
     self.ui.detectDevice.connect('clicked(bool)', self.onDetectDeviceButton)
-    self.ui.connectButton.connect('toggled(bool)', self.onApplyButton)
+    self.ui.connectButton.connect('toggled(bool)', self.onConnectButton)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -79,7 +79,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def cleanup(self):
     pass
 
-  def onApplyButton(self, toggle):
+  def onConnectButton(self, toggle):
     if toggle:
       self.logic.connect(self.ui.portSelectorComboBox.currentText,self.ui.baudSelectorComboBox.currentText)
       self.ui.connectButton.setText("Disconnect")
