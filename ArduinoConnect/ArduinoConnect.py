@@ -105,6 +105,13 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
 
+  def __init__(self):
+      ScriptedLoadableModuleLogic.__init__(self)
+
+      self.parameterNode=slicer.vtkMRMLScriptedModuleNode()
+      self.parameterNode.SetName("arduinoNode")
+      slicer.mrmlScene.AddNode(self.parameterNode)
+
   def connect(self, port,baud):
       import serial
       self.arduino = serial.Serial(port,baud)
@@ -127,7 +134,9 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
               if len(message) >= 1:
                   #slicer.arduinoData.append(message)
                   slicer.arduinoData = message
-                  print(slicer.arduinoData)
+                  print("FROM LOGIC: %s" % (str(slicer.arduinoData)))
+                  self.parameterNode.SetParameter("Data", message)
+                  #self.parameterNode.Modified()
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
   def processMessage(self, msg):
