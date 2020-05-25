@@ -151,8 +151,9 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       self.parameterNode.SetName("arduinoNode")
       slicer.mrmlScene.AddNode(self.parameterNode)
 
-  def connect(self, port,baud):
       import serial
+
+  def connect(self, port,baud):
 
       slicer.arduinoData = {}
       slicer.arduinoData["lastMessage"] = None
@@ -161,13 +162,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
         self.arduino = serial.Serial(port,baud)
       except serial.serialutil.SerialException:
         return False
-        """
-        connectionErrorMBox = qt.QMessageBox()
-        connectionErrorMBox.setIcon(qt.QMessageBox().Critical)
-        connectionErrorMBox.setWindowTitle("Device not found")
-        connectionErrorMBox.setText("Impssible to connect the selected device.")
-        connectionErrorMBox.exec()
-        """
+
       self.arduinoEndOfLine = '\n'
       self.arduinoRefreshRateFps = 10.0
       qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
