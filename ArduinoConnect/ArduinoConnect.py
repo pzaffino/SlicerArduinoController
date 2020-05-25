@@ -80,11 +80,29 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     pass
 
   def onConnectButton(self, toggle):
-    if toggle:
-      self.logic.connect(self.ui.portSelectorComboBox.currentText,self.ui.baudSelectorComboBox.currentText)
-      self.ui.connectButton.setText("Disconnect")
-      self.ui.connectButton.setStyleSheet("background-color:#ff0000")
-    else:
+
+    # clicked connect and the device list has elements
+    if toggle and self.ui.portSelectorComboBox.currentText != "":
+
+        self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,self.ui.baudSelectorComboBox.currentText)
+
+        if self.connected:
+          self.ui.connectButton.setText("Disconnect")
+          self.ui.connectButton.setStyleSheet("background-color:#ff0000")
+        else:
+          self.deviceError("Device not found", "Impssible to connect the selected device.", "critical")
+          self.ui.connectButton.setChecked(False)
+          self.ui.connectButton.setText("Connect")
+          self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
+
+    # clicked connect but device list has no elements
+    elif toggle and self.ui.portSelectorComboBox.currentText == "":
+        self.deviceError("Ports scan", "Any device has been set!", "warning")
+        self.ui.connectButton.setChecked(False)
+        return
+
+    # clicked disconnect with a running connection
+    elif not toggle and hasattr(self.logic, "arduino") and self.connected:
       self.logic.disconnect()
       self.ui.connectButton.setText("Connect")
       self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
@@ -97,15 +115,20 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
 
     if len(devices)==0:
-        noDeviceMBox = qt.QMessageBox()
-        noDeviceMBox.setText("Any device has been found!")
-        noDeviceMBox.setIcon(qt.QMessageBox().Warning)
-        noDeviceMBox.setWindowTitle("Ports scan")
-        noDeviceMBox.exec()
-
+        self.deviceError("Ports scan", "Any device has been found!", "warning")
     elif len(devices)>0:
         for device in devices:
             self.ui.portSelectorComboBox.addItem(device)
+
+  def deviceError(self, title, message, error_type="warning"):
+    deviceMBox = qt.QMessageBox()
+    if error_type == "warning":
+      deviceMBox.setIcon(qt.QMessageBox().Warning)
+    elif error_type == "critical":
+      deviceMBox.setIcon(qt.QMessageBox().Critical)
+    deviceMBox.setWindowTitle(title)
+    deviceMBox.setText(message)
+    deviceMBox.exec()
 
 #
 # ArduinoConnectLogic
@@ -134,10 +157,21 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       slicer.arduinoData = {}
       slicer.arduinoData["lastMessage"] = None
 
-      self.arduino = serial.Serial(port,baud)
+      try:
+        self.arduino = serial.Serial(port,baud)
+      except serial.serialutil.SerialException:
+        return False
+        """
+        connectionErrorMBox = qt.QMessageBox()
+        connectionErrorMBox.setIcon(qt.QMessageBox().Critical)
+        connectionErrorMBox.setWindowTitle("Device not found")
+        connectionErrorMBox.setText("Impssible to connect the selected device.")
+        connectionErrorMBox.exec()
+        """
       self.arduinoEndOfLine = '\n'
       self.arduinoRefreshRateFps = 10.0
       qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+      return True
 
   def disconnect(self):
       self.arduino.close()
