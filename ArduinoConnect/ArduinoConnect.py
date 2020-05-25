@@ -69,9 +69,9 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui = slicer.util.childWidgetVariables(uiWidget)
 
     # connections
-    self.ui.applyButton.connect('toggled(bool)', self.onApplyButton)
-    self.ui.detectDevice.connect('clicked(bool)', self.onDetectDeviceButton)
     self.ui.portSelectorComboBox.setEnabled(False)
+    self.ui.detectDevice.connect('clicked(bool)', self.onDetectDeviceButton)
+    self.ui.connectButton.connect('toggled(bool)', self.onApplyButton)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -82,12 +82,12 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def onApplyButton(self, toggle):
     if toggle:
       self.logic.connect(self.ui.portSelectorComboBox.currentText,self.ui.baudSelectorComboBox.currentText)
-      self.ui.applyButton.setText("Disconnect")
-      self.ui.applyButton.setStyleSheet("background-color:#ff0000")
+      self.ui.connectButton.setText("Disconnect")
+      self.ui.connectButton.setStyleSheet("background-color:#ff0000")
     else:
       self.logic.disconnect()
-      self.ui.applyButton.setText("Connect")
-      self.ui.applyButton.setStyleSheet("background-color:#f1f1f1;")
+      self.ui.connectButton.setText("Connect")
+      self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
 
   def onDetectDeviceButton(self, clicked):
 
