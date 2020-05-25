@@ -4,6 +4,21 @@ import vtk, qt, ctk, slicer
 from slicer.ScriptedLoadableModule import *
 import logging
 import serial.tools.list_ports
+
+#
+# ArduinoAppTemplate
+#
+
+class ArduinoAppTemplate():
+  """ Template class for writing code on top of Arduino Connector
+  """
+  def __init__(self):
+    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
+    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.printArduino)
+
+  def printArduino(self, caller, event):
+    print("FIRED! %s" % (slicer.arduinoData["lastMessage"]))
+
 #
 # ArduinoConnect
 #
@@ -46,6 +61,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     ScriptedLoadableModuleWidget.setup(self)
 
     self.logic = ArduinoConnectLogic()
+    arduinoApp = ArduinoAppTemplate()
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
@@ -114,8 +130,11 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
   def connect(self, port,baud):
       import serial
+
+      slicer.arduinoData = {}
+      slicer.arduinoData["lastMessage"] = None
+
       self.arduino = serial.Serial(port,baud)
-      slicer.arduinoData = []
       self.arduinoEndOfLine = '\n'
       self.arduinoRefreshRateFps = 10.0
       qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
@@ -132,11 +151,17 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
               message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
               message = self.processMessage(message)
               if len(message) >= 1:
-                  #slicer.arduinoData.append(message)
-                  slicer.arduinoData = message
-                  print("FROM LOGIC: %s" % (str(slicer.arduinoData)))
-                  self.parameterNode.SetParameter("Data", message)
-                  #self.parameterNode.Modified()
+
+                  slicer.arduinoData["lastMessage"] = message
+
+                  print("FROM LOGIC: %s" % (str(slicer.arduinoData["lastMessage"])))
+
+                  # Fire a message even if the message is unchanged
+                  if message == self.parameterNode.GetParameter("Data"):
+                    self.parameterNode.Modified()
+                  else:
+                    self.parameterNode.SetParameter("Data", message)
+
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
   def processMessage(self, msg):
