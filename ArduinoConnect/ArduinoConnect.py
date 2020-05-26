@@ -102,7 +102,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
         return
 
     # clicked disconnect with a running connection
-    elif not toggle and hasattr(self.logic, "arduino") and self.connected:
+    elif not toggle and self.logic.arduinoConnection is not None and self.connected:
       self.logic.disconnect()
       self.ui.connectButton.setText("Connect")
       self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
@@ -147,11 +147,13 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   def __init__(self):
       ScriptedLoadableModuleLogic.__init__(self)
 
+      import serial
+
       self.parameterNode=slicer.vtkMRMLScriptedModuleNode()
       self.parameterNode.SetName("arduinoNode")
       slicer.mrmlScene.AddNode(self.parameterNode)
 
-      import serial
+      self.arduinoConnection = None
 
   def connect(self, port,baud):
 
@@ -159,7 +161,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       slicer.arduinoData["lastMessage"] = None
 
       try:
-        self.arduino = serial.Serial(port,baud)
+        self.arduinoConnection = serial.Serial(port,baud)
       except serial.serialutil.SerialException:
         return False
 
@@ -169,13 +171,18 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       return True
 
   def disconnect(self):
-      self.arduino.close()
+      self.arduinoConnection.close()
+      self.arduinoConnection = None
 
   def pollSerialDevice(self):
-      if self.arduino.isOpen() and self.arduino.in_waiting == 0: # No messages from arduino
+
+      if self.arduinoConnection is None:
+        return
+
+      if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-      elif self.arduino.isOpen() and self.arduino.in_waiting > 0: # Some messages from arduino
-          arduinoReceiveBuffer = self.arduino.readline().decode('ascii')
+      elif self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting > 0: # Some messages from arduino
+          arduinoReceiveBuffer = self.arduinoConnection.readline().decode('ascii')
           if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
               message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
               message = self.processMessage(message)
