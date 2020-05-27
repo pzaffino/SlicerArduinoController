@@ -14,10 +14,10 @@ class ArduinoAppTemplate():
   """
   def __init__(self):
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.printArduino)
+    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
 
-  def printArduino(self, caller, event):
-    print("FIRED! %s" % (slicer.arduinoData["lastMessage"]))
+  def doSomethingWhenNewDataIsRead(self, caller, event):
+    print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
 
 #
 # ArduinoConnect
