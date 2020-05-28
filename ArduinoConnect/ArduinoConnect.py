@@ -4,6 +4,7 @@ import vtk, qt, ctk, slicer
 from slicer.ScriptedLoadableModule import *
 import logging
 import serial.tools.list_ports
+import shutil, os
 
 #
 # ArduinoAppTemplate
@@ -68,16 +69,29 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.layout.addWidget(uiWidget)
     self.ui = slicer.util.childWidgetVariables(uiWidget)
 
+    # Set IDE labels
+    self.arduinoIDEExe = self.autoFindIDEExe()
+    self.ui.IDEPathText.setText(self.arduinoIDEExe)
+
     # connections
     self.ui.portSelectorComboBox.setEnabled(False)
     self.ui.detectDevice.connect('clicked(bool)', self.onDetectDeviceButton)
     self.ui.connectButton.connect('toggled(bool)', self.onConnectButton)
+    self.ui.setIDEButton.connect('clicked(bool)', self.onSetIDEButton)
+    self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
 
     # Add vertical spacer
     self.layout.addStretch(1)
 
   def cleanup(self):
     pass
+
+  def autoFindIDEExe(self):
+    arduinoIDEExe = shutil.which("arduino")
+    if arduinoIDEExe is None:
+      return ""
+    else:
+      return arduinoIDEExe
 
   def onConnectButton(self, toggle):
 
@@ -119,6 +133,14 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     elif len(devices)>0:
         for device in devices:
             self.ui.portSelectorComboBox.addItem(device)
+
+  def onSetIDEButton(self, clicked):
+    print("Set IDE")
+
+  def onRunIDEButton(self, clicked):
+    print("Run IDE")
+    #if self.arduinoIDEExe != "":
+    #  os.system(self.arduinoIDEExe)
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
