@@ -4,7 +4,7 @@ import vtk, qt, ctk, slicer
 from slicer.ScriptedLoadableModule import *
 import logging
 import serial.tools.list_ports
-import shutil, os
+import shutil, subprocess
 
 #
 # ArduinoAppTemplate
@@ -135,12 +135,13 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
             self.ui.portSelectorComboBox.addItem(device)
 
   def onSetIDEButton(self, clicked):
-    print("Set IDE")
+    dialog = qt.QFileDialog()
+    self.arduinoIDEExe = dialog.getOpenFileName(None, "Arduino IDE executable", "")
+    self.ui.IDEPathText.setText(self.arduinoIDEExe)
 
   def onRunIDEButton(self, clicked):
-    print("Run IDE")
-    #if self.arduinoIDEExe != "":
-    #  os.system(self.arduinoIDEExe)
+    if self.arduinoIDEExe != "":
+      subprocess.Popen(self.arduinoIDEExe)
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
