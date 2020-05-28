@@ -4,7 +4,7 @@ import vtk, qt, ctk, slicer
 from slicer.ScriptedLoadableModule import *
 import logging
 import serial.tools.list_ports
-import shutil, subprocess
+import shutil, subprocess, json
 
 #
 # ArduinoAppTemplate
@@ -61,6 +61,11 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
 
+    # Configuration
+    self.configFileName = __file__.replace("ArduinoConnect.py", "Resources%sArduinoConnectConfig.json" % (os.sep))
+    with open(self.configFileName) as f:
+      self.config = json.load(f)
+
     self.logic = ArduinoConnectLogic()
     arduinoApp = ArduinoAppTemplate()
 
@@ -70,7 +75,9 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui = slicer.util.childWidgetVariables(uiWidget)
 
     # Set IDE labels
-    self.arduinoIDEExe = self.autoFindIDEExe()
+    self.arduinoIDEExe = self.config["IDEExe"]
+    if self.arduinoIDEExe == "":
+      self.arduinoIDEExe = self.autoFindIDEExe()
     self.ui.IDEPathText.setText(self.arduinoIDEExe)
 
     # connections
@@ -85,6 +92,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
   def cleanup(self):
     pass
+
+  def writeConfig(self):
+    with open(self.configFileName, 'w') as json_file:
+      json.dump(self.config, json_file)
 
   def autoFindIDEExe(self):
     arduinoIDEExe = shutil.which("arduino")
@@ -136,8 +147,12 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
   def onSetIDEButton(self, clicked):
     dialog = qt.QFileDialog()
-    self.arduinoIDEExe = dialog.getOpenFileName(None, "Arduino IDE executable", "")
+    self.arduinoIDEExe = dialog.getOpenFileName(None, "Arduino IDE executable", os.path.expanduser("~"))
     self.ui.IDEPathText.setText(self.arduinoIDEExe)
+
+    # Update config
+    self.config["IDEExe"] = self.arduinoIDEExe
+    self.writeConfig()
 
   def onRunIDEButton(self, clicked):
     if self.arduinoIDEExe != "":
