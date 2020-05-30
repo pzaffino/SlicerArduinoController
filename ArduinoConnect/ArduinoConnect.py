@@ -193,10 +193,10 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
       self.arduinoConnection = None
 
-  def connect(self, port,baud):
+  def sendMessage(self, messageToSend):
+      print(messageToSend)
 
-      slicer.arduinoData = {}
-      slicer.arduinoData["lastMessage"] = None
+  def connect(self, port,baud):
 
       try:
         self.arduinoConnection = serial.Serial(port,baud)
@@ -226,9 +226,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
               message = self.processMessage(message)
               if len(message) >= 1:
 
-                  slicer.arduinoData["lastMessage"] = message
-
-                  print("FROM LOGIC: %s" % (str(slicer.arduinoData["lastMessage"])))
+                  print("FROM LOGIC: %s" % (message))
 
                   # Fire a message even if the message is unchanged
                   if message == self.parameterNode.GetParameter("Data"):
