@@ -14,11 +14,17 @@ class ArduinoAppTemplate():
   """ Template class for writing code on top of Arduino Connector
   """
   def __init__(self):
+
+    import ArduinoConnect
+
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
 
   def doSomethingWhenNewDataIsRead(self, caller, event):
     print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
+
+  def sendDataToArduino(self, message):
+    ArduinoConnect.ArduinoConnectLogic().sendMessage(message)
 
 #
 # ArduinoConnect
