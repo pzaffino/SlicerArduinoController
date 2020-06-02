@@ -15,8 +15,6 @@ class ArduinoAppTemplate():
   """
   def __init__(self):
 
-    import ArduinoConnect
-
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
 
@@ -235,7 +233,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   def sendMessage(self, messageToSend):
       #print(messageToSend)
       if self.arduinoConnection is not None:
-        self.arduinoConnection.write(messageToSend)
+        self.arduinoConnection.write(str.encode(messageToSend))
         return True
       else:
         return False
