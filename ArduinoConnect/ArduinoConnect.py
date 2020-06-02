@@ -24,9 +24,7 @@ class ArduinoAppTemplate():
     print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
 
   def sendDataToArduino(self, message):
-    arduinoConnectLogic = slicer.modules.arduinoconnect.widgetRepresentation().self().logic
-    if arduinoConnectLogic.arduinoConnection is not None:
-      arduinoConnectLogic.sendMessage(message)
+    messageSent = slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage(message)
 
 #
 # ArduinoConnect
@@ -203,7 +201,11 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
   def sendMessage(self, messageToSend):
       #print(messageToSend)
-      self.arduinoConnection.write(messageToSend)
+      if self.arduinoConnection is not None:
+        self.arduinoConnection.write(messageToSend)
+        return True
+      else:
+        return False
 
   def connect(self, port,baud):
 
