@@ -21,10 +21,39 @@ class ArduinoAppTemplate():
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
 
   def doSomethingWhenNewDataIsRead(self, caller, event):
-    print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
+    pass
+    #EXAMPLE TO PRINT THE RECEIVED VALUE:
+    #print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
 
   def sendDataToArduino(self, message):
     messageSent = slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage(message)
+
+#
+# Arduino Monitor
+#
+
+class ArduinoMonitor():
+  """ Class for writing plotting arduno data into a separate window
+  """
+  def __init__(self):
+
+    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
+    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.addLine)
+
+    self.monitor = qt.QTextEdit()
+    self.monitor.setWindowTitle("Adruino monitor")
+    self.monitor.setReadOnly(True)
+    self.monitor.show()
+
+  def addLine(self, caller, event):
+    message = self.ArduinoNode.GetParameter("Data")
+    if not message.endswith("\n"):
+      message = message + "\n"
+    self.monitor.insertPlainText(message)
+
+    # Show always the last message
+    verticalScrollBar = self.monitor.verticalScrollBar()
+    verticalScrollBar.setValue(verticalScrollBar.maximum)
 
 #
 # ArduinoConnect
@@ -92,6 +121,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.connectButton.connect('toggled(bool)', self.onConnectButton)
     self.ui.setIDEButton.connect('clicked(bool)', self.onSetIDEButton)
     self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
+    self.ui.monitorButton.connect('clicked(bool)', self.onMonitorButton)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -163,6 +193,9 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def onRunIDEButton(self, clicked):
     if self.arduinoIDEExe != "":
       subprocess.Popen(self.arduinoIDEExe)
+
+  def onMonitorButton(self, clicked):
+    monitor = ArduinoMonitor()
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
@@ -236,8 +269,6 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
               message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
               message = self.processMessage(message)
               if len(message) >= 1:
-
-                  print("FROM LOGIC: %s" % (message))
 
                   # Fire a message even if the message is unchanged
                   if message == self.parameterNode.GetParameter("Data"):
