@@ -19,9 +19,8 @@ class ArduinoAppTemplate():
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
 
   def doSomethingWhenNewDataIsRead(self, caller, event):
-    pass
     #EXAMPLE TO PRINT THE RECEIVED VALUE:
-    #print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
+    print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
 
   def sendDataToArduino(self, message):
     messageSent = slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage(message)
@@ -100,7 +99,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.config = json.load(f)
 
     self.logic = ArduinoConnectLogic()
-    arduinoApp = ArduinoAppTemplate()
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
