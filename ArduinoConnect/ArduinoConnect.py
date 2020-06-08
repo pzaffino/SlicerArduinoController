@@ -3,7 +3,6 @@ import unittest
 import vtk, qt, ctk, slicer
 from slicer.ScriptedLoadableModule import *
 import logging
-import serial.tools.list_ports
 import shutil, subprocess, json
 
 #
@@ -76,6 +75,7 @@ class ArduinoConnect(ScriptedLoadableModule):
     # If needed install serial pylibrary before imporing. If already installed, just import it.
     try:
       import serial
+      import serial.tools.list_ports
     except ModuleNotFoundError:
       slicer.util.pip_install("pyserial")
       import serial
