@@ -5,6 +5,15 @@ from slicer.ScriptedLoadableModule import *
 import logging
 import shutil, subprocess, json
 
+# If needed install serial pylibrary before imporing. If already installed, just import it.
+try:
+  import serial
+  import serial.tools.list_ports
+except ModuleNotFoundError:
+  slicer.util.pip_install("pyserial")
+  import serial
+  import serial.tools.list_ports
+
 #
 # ArduinoAppTemplate
 #
@@ -70,16 +79,7 @@ class ArduinoConnect(ScriptedLoadableModule):
     This module allows to connect and transmit/receive data from Arduino board. On top of this users can build applications.
 """
     self.parent.helpText += self.getDefaultModuleDocumentationLink()
-    self.parent.acknowledgementText = """ """ # replace with organization, grant and thanks.
-
-    # If needed install serial pylibrary before imporing. If already installed, just import it.
-    try:
-      import serial
-      import serial.tools.list_ports
-    except ModuleNotFoundError:
-      slicer.util.pip_install("pyserial")
-      import serial
-
+    self.parent.acknowledgementText = """ """ # replace with organization, grant and thanks. 
 
 #
 # ArduinoConnectWidget
