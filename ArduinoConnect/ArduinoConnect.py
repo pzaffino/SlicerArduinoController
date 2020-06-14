@@ -44,36 +44,39 @@ class ArduinoPlotter():
 
     # Create table vtk
     tableNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLTableNode")
-    table = tableNode.GetTable()
+    self.table = tableNode.GetTable()
     arrX = vtk.vtkFloatArray()
     arrX.SetName("Sample")
-    table.AddColumn(arrX)
+    self.table.AddColumn(arrX)
 
     self.arrY = vtk.vtkFloatArray()
     self.arrY.SetName("Amplitude")
-    table.AddColumn(self.arrY)
+    self.table.AddColumn(self.arrY)
 
-    table.SetNumberOfRows(10)
+    self.table.SetNumberOfRows(20)
     for i in range(10):
-        table.SetValue(i, 0, i)
-        table.SetValue(i, 1, 0)
+        self.table.SetValue(i, 0, i)
+        self.table.SetValue(i, 1, 0)
 
     # Create plot node
     plotSeriesNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotSeriesNode", "Amplitude")
     plotSeriesNode.SetAndObserveTableNodeID(tableNode.GetID())
     plotSeriesNode.SetXColumnName("Sec")
     plotSeriesNode.SetYColumnName("Amplitude")
-    plotSeriesNode.SetPlotType(slicer.vtkMRMLPlotSeriesNode.PlotTypeScatter)
+    plotSeriesNode.SetPlotType(slicer.vtkMRMLPlotSeriesNode.PlotTypeLine)
+    plotSeriesNode.SetLineStyle(slicer.vtkMRMLPlotSeriesNode.LineStyleSolid)
     plotSeriesNode.SetMarkerStyle(slicer.vtkMRMLPlotSeriesNode.MarkerStyleSquare)
     plotSeriesNode.SetUniqueColor()
 
     # Create plot chart node
-    plotChartNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotChartNode")
-    plotChartNode.AddAndObservePlotSeriesNodeID(plotSeriesNode.GetID())
-    plotChartNode.SetTitle('Arduino Data')
-    plotChartNode.SetXAxisTitle('Sec')
-    plotChartNode.SetYAxisTitle('Amplitude')
-    plotChartNode.LegendVisibilityOff()
+    self.plotChartNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotChartNode")
+    self.plotChartNode.AddAndObservePlotSeriesNodeID(plotSeriesNode.GetID())
+    self.plotChartNode.SetTitle('Arduino Data')
+    self.plotChartNode.SetXAxisTitle('Sec')
+    self.plotChartNode.SetYAxisTitle('Amplitude')
+    self.plotChartNode.LegendVisibilityOff()
+    #self.plotChartNode.SetYAxisRange((0,260))
+    self.plotChartNode.SetYAxisRangeAuto(True)
 
     # Switch to a layout that contains a plot view to create a plot widget
     layoutManager = slicer.app.layoutManager()
@@ -81,17 +84,15 @@ class ArduinoPlotter():
     layoutManager.setLayout(layoutWithPlot)
 
     # Select chart in plot view
-    plotWidget = layoutManager.plotWidget(0)
-    plotViewNode = plotWidget.mrmlPlotViewNode()
-    plotViewNode.SetPlotChartNodeID(plotChartNode.GetID())
-
-    print("ok")        
+    self.plotWidget = layoutManager.plotWidget(0)
+    plotViewNode = self.plotWidget.mrmlPlotViewNode()
+    plotViewNode.SetPlotChartNodeID(self.plotChartNode.GetID())
 
   def addPointToPlot(self, caller, event):
     self.arrY.RemoveFirstTuple()
     self.arrY.InsertNextTuple1(float(self.ArduinoNode.GetParameter("Data")))
-
-    print("aaa")
+    self.table.Modified()
+    self.plotWidget.plotView().fitToContent()
 
 #
 # Arduino Monitor
@@ -179,7 +180,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
     self.ui.monitorButton.connect('clicked(bool)', self.onMonitorButton)
     self.ui.plotterButton.connect('clicked(bool)', self.onPlotterButton)
-    
+
     # Add vertical spacer
     self.layout.addStretch(1)
 
@@ -255,8 +256,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     monitor = ArduinoMonitor()
 
   def onPlotterButton(self, clicked):
-    plotter=ArduinoPlotter()
-
+    plotter = ArduinoPlotter()
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
