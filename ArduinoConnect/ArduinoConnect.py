@@ -42,26 +42,28 @@ class ArduinoPlotter():
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.addPointToPlot)
 
-    # Create table vtk
-    tableNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLTableNode")
-    self.table = tableNode.GetTable()
-    arrX = vtk.vtkFloatArray()
-    arrX.SetName("Sample")
-    self.table.AddColumn(arrX)
+    # Add data into table vtk
+    self.tableNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLTableNode")
+    self.table = self.tableNode.GetTable()
+
+    self.arrX = vtk.vtkFloatArray()
+    self.arrX.SetName("Sample")
+    self.table.AddColumn(self.arrX)
 
     self.arrY = vtk.vtkFloatArray()
     self.arrY.SetName("Amplitude")
     self.table.AddColumn(self.arrY)
 
-    self.table.SetNumberOfRows(20)
-    for i in range(10):
+    self.numberOfSamples = 20
+    self.table.SetNumberOfRows(self.numberOfSamples)
+    for i in range(self.numberOfSamples):
         self.table.SetValue(i, 0, i)
         self.table.SetValue(i, 1, 0)
 
     # Create plot node
     plotSeriesNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotSeriesNode", "Amplitude")
-    plotSeriesNode.SetAndObserveTableNodeID(tableNode.GetID())
-    plotSeriesNode.SetXColumnName("Sec")
+    plotSeriesNode.SetAndObserveTableNodeID(self.tableNode.GetID())
+    plotSeriesNode.SetXColumnName("Sample")
     plotSeriesNode.SetYColumnName("Amplitude")
     plotSeriesNode.SetPlotType(slicer.vtkMRMLPlotSeriesNode.PlotTypeLine)
     plotSeriesNode.SetLineStyle(slicer.vtkMRMLPlotSeriesNode.LineStyleSolid)
@@ -72,10 +74,10 @@ class ArduinoPlotter():
     self.plotChartNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotChartNode")
     self.plotChartNode.AddAndObservePlotSeriesNodeID(plotSeriesNode.GetID())
     self.plotChartNode.SetTitle('Arduino Data')
-    self.plotChartNode.SetXAxisTitle('Sec')
+    self.plotChartNode.SetXAxisTitle('Sample')
     self.plotChartNode.SetYAxisTitle('Amplitude')
     self.plotChartNode.LegendVisibilityOff()
-    #self.plotChartNode.SetYAxisRange((0,260))
+    self.plotChartNode.SetXAxisRangeAuto(True)
     self.plotChartNode.SetYAxisRangeAuto(True)
 
     # Switch to a layout that contains a plot view to create a plot widget
@@ -89,8 +91,10 @@ class ArduinoPlotter():
     plotViewNode.SetPlotChartNodeID(self.plotChartNode.GetID())
 
   def addPointToPlot(self, caller, event):
-    self.arrY.RemoveFirstTuple()
+
     self.arrY.InsertNextTuple1(float(self.ArduinoNode.GetParameter("Data")))
+    self.arrY.RemoveFirstTuple()
+
     self.table.Modified()
     self.plotWidget.plotView().fitToContent()
 
@@ -256,7 +260,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     monitor = ArduinoMonitor()
 
   def onPlotterButton(self, clicked):
-    plotter = ArduinoPlotter()
+    self.plotter = ArduinoPlotter()
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
