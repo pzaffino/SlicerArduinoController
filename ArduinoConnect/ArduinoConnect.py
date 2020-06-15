@@ -38,7 +38,7 @@ class ArduinoAppTemplate():
 #
 
 class ArduinoPlotter():
-  def __init__(self):
+  def __init__(self, numberOfSamples):
 
     self.active = True
 
@@ -50,7 +50,7 @@ class ArduinoPlotter():
     self.tableNode.SetName("Arduino plotting table")
     self.table = self.tableNode.GetTable()
 
-    self.numberOfSamples = 20
+    self.numberOfSamples = numberOfSamples
     self.initializeTable()
 
     # Create plot node
@@ -101,6 +101,8 @@ class ArduinoPlotter():
     for i in range(self.numberOfSamples):
         self.table.SetValue(i, 0, i)
         self.table.SetValue(i, 1, 0)
+
+    self.table.Modified()
 
   def addPointToPlot(self, caller, event):
 
@@ -200,6 +202,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
     self.ui.monitorButton.connect('clicked(bool)', self.onMonitorButton)
     self.ui.plotterButton.connect('toggled(bool)', self.onPlotterButton)
+    self.ui.samplesToPlotText.textChanged.connect(self.onSamplesToPlot)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -276,9 +279,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     monitor = ArduinoMonitor()
 
   def onPlotterButton(self, clicked):
-
     if clicked and self.plotter is None:
-      self.plotter = ArduinoPlotter()
+      self.plotter = ArduinoPlotter(int(self.ui.samplesToPlotText.text))
       self.ui.plotterButton.setText("Stop plotting")
 
     if not clicked and self.plotter is not None:
@@ -288,6 +290,12 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     if clicked and self.plotter is not None:
       self.plotter.active = True
       self.ui.plotterButton.setText("Stop plotting")
+
+  def onSamplesToPlot(self, event):
+    samplesToPlot = int(self.ui.samplesToPlotText.text)
+    if self.plotter is not None and samplesToPlot > 0:
+      self.plotter.numberOfSamples = samplesToPlot
+      self.plotter.initializeTable()
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
