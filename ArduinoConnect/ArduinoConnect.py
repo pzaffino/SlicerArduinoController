@@ -57,7 +57,7 @@ class ArduinoPlotter():
     self.plotSeriesNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotSeriesNode", "Amplitude")
     self.plotSeriesNode.SetName("Arduino plot series")
     self.plotSeriesNode.SetAndObserveTableNodeID(self.tableNode.GetID())
-    self.plotSeriesNode.SetXColumnName("Sample")
+    self.plotSeriesNode.SetXColumnName("Samples")
     self.plotSeriesNode.SetYColumnName("Amplitude")
     self.plotSeriesNode.SetPlotType(slicer.vtkMRMLPlotSeriesNode.PlotTypeLine)
     self.plotSeriesNode.SetLineStyle(slicer.vtkMRMLPlotSeriesNode.LineStyleSolid)
@@ -69,7 +69,7 @@ class ArduinoPlotter():
     self.plotChartNode.SetName("Arduino plot chart")
     self.plotChartNode.AddAndObservePlotSeriesNodeID(self.plotSeriesNode.GetID())
     self.plotChartNode.SetTitle('Arduino Data')
-    self.plotChartNode.SetXAxisTitle('Sample')
+    self.plotChartNode.SetXAxisTitle('Samples')
     self.plotChartNode.SetYAxisTitle('Amplitude')
     self.plotChartNode.LegendVisibilityOff()
     self.plotChartNode.SetXAxisRangeAuto(True)
@@ -90,7 +90,7 @@ class ArduinoPlotter():
     self.table.Initialize()
 
     self.arrX = vtk.vtkFloatArray()
-    self.arrX.SetName("Sample")
+    self.arrX.SetName("Samples")
     self.table.AddColumn(self.arrX)
 
     self.arrY = vtk.vtkFloatArray()
@@ -207,6 +207,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     # Add vertical spacer
     self.layout.addStretch(1)
 
+    # Default values for QLineEdit
+    self.ui.samplesPerSecondText.setText("10")
+    self.ui.samplesToPlotText.setText("30")
+
   def cleanup(self):
     pass
 
@@ -226,11 +230,17 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     # clicked connect and the device list has elements
     if toggle and self.ui.portSelectorComboBox.currentText != "":
 
-        self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,self.ui.baudSelectorComboBox.currentText)
+        self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,
+                                            self.ui.baudSelectorComboBox.currentText,
+                                            self.ui.samplesPerSecondText.text)
 
         if self.connected:
           self.ui.connectButton.setText("Disconnect")
           self.ui.connectButton.setStyleSheet("background-color:#ff0000")
+          self.ui.portSelectorComboBox.setEnabled(False)
+          self.ui.baudSelectorComboBox.setEnabled(False)
+          self.ui.detectDevice.setEnabled(False)
+          self.ui.samplesPerSecondText.setEnabled(False)
         else:
           self.deviceError("Device not found", "Impssible to connect the selected device.", "critical")
           self.ui.connectButton.setChecked(False)
@@ -248,6 +258,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.logic.disconnect()
       self.ui.connectButton.setText("Connect")
       self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
+      self.ui.portSelectorComboBox.setEnabled(True)
+      self.ui.baudSelectorComboBox.setEnabled(True)
+      self.ui.detectDevice.setEnabled(True)
+      self.ui.samplesPerSecondText.setEnabled(True)
 
   def onDetectDeviceButton(self, clicked):
 
@@ -340,15 +354,15 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       else:
         return False
 
-  def connect(self, port,baud):
+  def connect(self, port, baud, samplesPerSecond):
+      self.arduinoEndOfLine = '\n'
+      self.arduinoRefreshRateFps = float(samplesPerSecond)
 
       try:
-        self.arduinoConnection = serial.Serial(port,baud)
+        self.arduinoConnection = serial.Serial(port, baud)
       except serial.serialutil.SerialException:
         return False
 
-      self.arduinoEndOfLine = '\n'
-      self.arduinoRefreshRateFps = 10.0
       qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
       return True
 
