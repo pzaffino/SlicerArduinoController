@@ -46,33 +46,22 @@ class ArduinoPlotter():
     self.tableNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLTableNode")
     self.table = self.tableNode.GetTable()
 
-    self.arrX = vtk.vtkFloatArray()
-    self.arrX.SetName("Sample")
-    self.table.AddColumn(self.arrX)
-
-    self.arrY = vtk.vtkFloatArray()
-    self.arrY.SetName("Amplitude")
-    self.table.AddColumn(self.arrY)
-
     self.numberOfSamples = 20
-    self.table.SetNumberOfRows(self.numberOfSamples)
-    for i in range(self.numberOfSamples):
-        self.table.SetValue(i, 0, i)
-        self.table.SetValue(i, 1, 0)
+    self.initializeTable()
 
     # Create plot node
-    plotSeriesNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotSeriesNode", "Amplitude")
-    plotSeriesNode.SetAndObserveTableNodeID(self.tableNode.GetID())
-    plotSeriesNode.SetXColumnName("Sample")
-    plotSeriesNode.SetYColumnName("Amplitude")
-    plotSeriesNode.SetPlotType(slicer.vtkMRMLPlotSeriesNode.PlotTypeLine)
-    plotSeriesNode.SetLineStyle(slicer.vtkMRMLPlotSeriesNode.LineStyleSolid)
-    plotSeriesNode.SetMarkerStyle(slicer.vtkMRMLPlotSeriesNode.MarkerStyleSquare)
-    plotSeriesNode.SetUniqueColor()
+    self.plotSeriesNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotSeriesNode", "Amplitude")
+    self.plotSeriesNode.SetAndObserveTableNodeID(self.tableNode.GetID())
+    self.plotSeriesNode.SetXColumnName("Sample")
+    self.plotSeriesNode.SetYColumnName("Amplitude")
+    self.plotSeriesNode.SetPlotType(slicer.vtkMRMLPlotSeriesNode.PlotTypeLine)
+    self.plotSeriesNode.SetLineStyle(slicer.vtkMRMLPlotSeriesNode.LineStyleSolid)
+    self.plotSeriesNode.SetMarkerStyle(slicer.vtkMRMLPlotSeriesNode.MarkerStyleSquare)
+    self.plotSeriesNode.SetUniqueColor()
 
     # Create plot chart node
     self.plotChartNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotChartNode")
-    self.plotChartNode.AddAndObservePlotSeriesNodeID(plotSeriesNode.GetID())
+    self.plotChartNode.AddAndObservePlotSeriesNodeID(self.plotSeriesNode.GetID())
     self.plotChartNode.SetTitle('Arduino Data')
     self.plotChartNode.SetXAxisTitle('Sample')
     self.plotChartNode.SetYAxisTitle('Amplitude')
@@ -81,14 +70,31 @@ class ArduinoPlotter():
     self.plotChartNode.SetYAxisRangeAuto(True)
 
     # Switch to a layout that contains a plot view to create a plot widget
-    layoutManager = slicer.app.layoutManager()
-    layoutWithPlot = slicer.modules.plots.logic().GetLayoutWithPlot(layoutManager.layout)
-    layoutManager.setLayout(layoutWithPlot)
+    self.layoutManager = slicer.app.layoutManager()
+    layoutWithPlot = slicer.modules.plots.logic().GetLayoutWithPlot(self.layoutManager.layout)
+    self.layoutManager.setLayout(layoutWithPlot)
 
     # Select chart in plot view
-    self.plotWidget = layoutManager.plotWidget(0)
-    plotViewNode = self.plotWidget.mrmlPlotViewNode()
-    plotViewNode.SetPlotChartNodeID(self.plotChartNode.GetID())
+    self.plotWidget = self.layoutManager.plotWidget(0)
+    self.plotViewNode = self.plotWidget.mrmlPlotViewNode()
+    self.plotViewNode.SetPlotChartNodeID(self.plotChartNode.GetID())
+
+  def initializeTable(self):
+
+    self.table.Initialize()
+
+    self.arrX = vtk.vtkFloatArray()
+    self.arrX.SetName("Sample")
+    self.table.AddColumn(self.arrX)
+
+    self.arrY = vtk.vtkFloatArray()
+    self.arrY.SetName("Amplitude")
+    self.table.AddColumn(self.arrY)
+
+    self.table.SetNumberOfRows(self.numberOfSamples)
+    for i in range(self.numberOfSamples):
+        self.table.SetValue(i, 0, i)
+        self.table.SetValue(i, 1, 0)
 
   def addPointToPlot(self, caller, event):
 
