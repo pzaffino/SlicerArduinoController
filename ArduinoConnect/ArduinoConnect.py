@@ -39,11 +39,15 @@ class ArduinoAppTemplate():
 
 class ArduinoPlotter():
   def __init__(self):
+
+    self.active = True
+
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.addPointToPlot)
 
     # Add data into table vtk
     self.tableNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLTableNode")
+    self.tableNode.SetName("Arduino plotting table")
     self.table = self.tableNode.GetTable()
 
     self.numberOfSamples = 20
@@ -51,6 +55,7 @@ class ArduinoPlotter():
 
     # Create plot node
     self.plotSeriesNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotSeriesNode", "Amplitude")
+    self.plotSeriesNode.SetName("Arduino plot series")
     self.plotSeriesNode.SetAndObserveTableNodeID(self.tableNode.GetID())
     self.plotSeriesNode.SetXColumnName("Sample")
     self.plotSeriesNode.SetYColumnName("Amplitude")
@@ -61,6 +66,7 @@ class ArduinoPlotter():
 
     # Create plot chart node
     self.plotChartNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLPlotChartNode")
+    self.plotChartNode.SetName("Arduino plot chart")
     self.plotChartNode.AddAndObservePlotSeriesNodeID(self.plotSeriesNode.GetID())
     self.plotChartNode.SetTitle('Arduino Data')
     self.plotChartNode.SetXAxisTitle('Sample')
@@ -98,18 +104,19 @@ class ArduinoPlotter():
 
   def addPointToPlot(self, caller, event):
 
-    self.arrY.InsertNextTuple1(float(self.ArduinoNode.GetParameter("Data")))
-    self.arrY.RemoveFirstTuple()
+    if self.active:
+      self.arrY.InsertNextTuple1(float(self.ArduinoNode.GetParameter("Data")))
+      self.arrY.RemoveFirstTuple()
 
-    self.table.Modified()
-    self.plotWidget.plotView().fitToContent()
+      self.table.Modified()
+      self.plotWidget.plotView().fitToContent()
 
 #
 # Arduino Monitor
 #
 
 class ArduinoMonitor():
-  """ Class for writing plotting arduno data into a separate window
+  """ Class for plotting arduno data into a separate window
   """
   def __init__(self):
 
@@ -117,7 +124,7 @@ class ArduinoMonitor():
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.addLine)
 
     self.monitor = qt.QTextEdit()
-    self.monitor.setWindowTitle("Adruino monitor")
+    self.monitor.setWindowTitle("Arduino monitor")
     self.monitor.setReadOnly(True)
     self.monitor.show()
 
@@ -164,6 +171,9 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
 
+    # Plotter
+    self.plotter = None
+
     # Configuration
     self.configFileName = __file__.replace("ArduinoConnect.py", "Resources%sArduinoConnectConfig.json" % (os.sep))
     with open(self.configFileName) as f:
@@ -189,7 +199,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.setIDEButton.connect('clicked(bool)', self.onSetIDEButton)
     self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
     self.ui.monitorButton.connect('clicked(bool)', self.onMonitorButton)
-    self.ui.plotterButton.connect('clicked(bool)', self.onPlotterButton)
+    self.ui.plotterButton.connect('toggled(bool)', self.onPlotterButton)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -266,7 +276,18 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     monitor = ArduinoMonitor()
 
   def onPlotterButton(self, clicked):
-    self.plotter = ArduinoPlotter()
+
+    if clicked and self.plotter is None:
+      self.plotter = ArduinoPlotter()
+      self.ui.plotterButton.setText("Stop plotting")
+
+    if not clicked and self.plotter is not None:
+      self.plotter.active = False
+      self.ui.plotterButton.setText("Plot data")
+
+    if clicked and self.plotter is not None:
+      self.plotter.active = True
+      self.ui.plotterButton.setText("Stop plotting")
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()

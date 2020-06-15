@@ -173,7 +173,7 @@
    <item row="15" column="0" colspan="2">
     <widget class="QPushButton" name="monitorButton">
      <property name="text">
-      <string>Print data in a window</string>
+      <string>Print data into a window</string>
      </property>
     </widget>
    </item>
@@ -181,6 +181,9 @@
     <widget class="QPushButton" name="plotterButton">
      <property name="text">
       <string>Plot data</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
