@@ -200,6 +200,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.connectButton.connect('toggled(bool)', self.onConnectButton)
     self.ui.setIDEButton.connect('clicked(bool)', self.onSetIDEButton)
     self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
+    self.ui.sendButton.connect('clicked(bool)', self.onSendButton)
     self.ui.monitorButton.connect('clicked(bool)', self.onMonitorButton)
     self.ui.plotterButton.connect('toggled(bool)', self.onPlotterButton)
     self.ui.samplesToPlotText.textChanged.connect(self.onSamplesToPlot)
@@ -240,6 +241,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
           self.ui.portSelectorComboBox.setEnabled(False)
           self.ui.baudSelectorComboBox.setEnabled(False)
           self.ui.detectDevice.setEnabled(False)
+          self.ui.sendButton.setEnabled(True)
           self.ui.samplesPerSecondText.setEnabled(False)
         else:
           self.deviceError("Device not found", "Impssible to connect the selected device.", "critical")
@@ -261,6 +263,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.ui.portSelectorComboBox.setEnabled(True)
       self.ui.baudSelectorComboBox.setEnabled(True)
       self.ui.detectDevice.setEnabled(True)
+      self.ui.sendButton.setEnabled(False)
       self.ui.samplesPerSecondText.setEnabled(True)
 
   def onDetectDeviceButton(self, clicked):
@@ -288,6 +291,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def onRunIDEButton(self, clicked):
     if self.arduinoIDEExe != "":
       subprocess.Popen(self.arduinoIDEExe)
+
+  def onSendButton(self, clicked):
+    message = self.ui.messageText.text
+    self.logic.sendMessage(message)
 
   def onMonitorButton(self, clicked):
     monitor = ArduinoMonitor()
