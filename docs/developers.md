@@ -1,3 +1,8 @@
+### Menu
+
+* [Home](https://pzaffino.github.io/SlicerArduinoController/index)
+* [Documentation](https://pzaffino.github.io/SlicerArduinoController/documentation)
+
 # Developers
 
 * [Paolo Zaffino](http://dmsc.unicz.it/personale/docente/paolozaffino) (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
