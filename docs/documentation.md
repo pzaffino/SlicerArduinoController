@@ -4,7 +4,7 @@
 
 * From 3D Slicer extension manager
   
-  Install the extension "ArduinoController" from the extension manager.
+  Install the "ArduinoController" extension from the extension manager.
   Available only for the nigthly (preview) relases.
 
 * From source
