@@ -11,9 +11,9 @@
 
   Download the source code from github (master branch) and add the "ArduinoConnect" folder to the module paths (Edit menu -> Application Settings -> Modules tab -> Additional module paths (use the arrows on the right of the box)).
 
-## Receive and send data from python code
+## Receive and send data via python code
 
-Once the device has been connected by using the extension GUI, data can be received and sent by python code.
+Once the device has been connected by using the extension GUI, data can be received and sent via python code.
 A template class is:
 
 ```python
