@@ -107,7 +107,14 @@ class ArduinoPlotter():
   def addPointToPlot(self, caller, event):
 
     if self.active:
-      self.arrY.InsertNextTuple1(float(self.ArduinoNode.GetParameter("Data")))
+
+      # Only float data type can be plot
+      try:
+        messageFloat = float(self.ArduinoNode.GetParameter("Data"))
+      except ValueError:
+        return
+
+      self.arrY.InsertNextTuple1(messageFloat)
       self.arrY.RemoveFirstTuple()
 
       self.table.Modified()
@@ -130,10 +137,16 @@ class ArduinoMonitor():
     self.monitor.setReadOnly(True)
     self.monitor.show()
 
+    self.messageLenghtLimit = 50
+
   def addLine(self, caller, event):
     message = self.ArduinoNode.GetParameter("Data")
-    if not message.endswith("\n"):
+
+    if len(message) > self.messageLenghtLimit:
+      message = "WARNING: message too long to be shown here\n"
+    elif len(message) <= self.messageLenghtLimit and not message.endswith("\n"):
       message = message + "\n"
+
     self.monitor.insertPlainText(message)
 
     # Show always the last message
