@@ -2,6 +2,8 @@
 
 * [Home](https://pzaffino.github.io/SlicerArduinoController/index)
 * [Documentation](https://pzaffino.github.io/SlicerArduinoController/documentation)
+* [Examples](https://pzaffino.github.io/SlicerArduinoController/examples)
+
 
 # Developers
 
