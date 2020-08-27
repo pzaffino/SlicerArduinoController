@@ -10,7 +10,8 @@
 ## Receiving data from Arduino:
 
 In this example, a distance sensor (SHARP 2Y0A2) will be used to edit a Slicer linear transformation.
-The transformation can be used to move whatever model/volume in Slicer.
+
+The transformation can be used to translate whatever model/volume in Slicer.
 
 The code for Arduino is the following (sensor connected to pin A0):
 
@@ -34,8 +35,7 @@ void loop()
 
 ```
 
-The Python code to be written into the Slicer shell is the following:
-(set the proper transformation ID according to the specific Slicer scene)
+The code to be written into the Python shell embedded in Slicer is the following (set the proper transformation node ID according to the specific Slicer scene):
 
 ```python
 class ExternalTransformationController():
@@ -80,9 +80,9 @@ Once the link has been established by using of SlicerArduino, the data coming fr
 ## Send data to Arduino:
 
 In this example a linear servomotor (Actuonix L16 Actuator 50mm) is controlled by using a translation computed by Slicer.
-The esample mimics a radiotherapy couch correction on basis of the alignment of daily and planning CTs.
+The example mimics a radiotherapy couch correction on basis of the alignment of daily and planning CTs.
 
-The Arduino code is:
+The Arduino code is (sensor connected to pin 9):
 ```C
 /*
  * range servo ms 1000 -- 2000 -> 0 -- 4.8 cm
@@ -135,7 +135,7 @@ void loop()
 
 ```
 
-The Python code to be written into the Slicer shell is (set the correct transformation node ID):
+The code to be written into the Python shell embedded in Slicer is the following (set the proper transformation node ID according to the specific Slicer scene):
 
 ```python
 # Get transformation node from Slicer scene
