@@ -14,7 +14,7 @@ The transformation can be used to translate whatever model/volume in Slicer.
 
 The code for Arduino is the following (sensor connected to pin A0):
 
-```C
+```cpp
 
 int sensorpin = 0;                      // analog pin used to connect the sharp sensor
 int val = 0;                            // variable to store the values from sensor(initially zero)
@@ -82,7 +82,7 @@ In this example a linear servomotor (Actuonix L16 Actuator 50mm) is controlled b
 The example mimics a radiotherapy couch correction on basis of the alignment of daily and planning CTs.
 
 The Arduino code is (sensor connected to pin 9):
-```C
+```cpp
 /*
  * range servo ms 1000 -- 2000 -> 0 -- 4.8 cm
  * 1 ms -> 0.0048 cm
