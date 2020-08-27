@@ -1,6 +1,7 @@
 ### Menu
 
 * [Home](https://pzaffino.github.io/SlicerArduinoController/index)
+* [Examples](https://pzaffino.github.io/SlicerArduinoController/examples)
 * [Developers](https://pzaffino.github.io/SlicerArduinoController/developers)
 
 # Documentation
