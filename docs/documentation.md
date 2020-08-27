@@ -30,7 +30,7 @@ The GUI extension offers the following capabilities:
 * Send messages
 * Show and plot data stream coming from Arduino device
 
-## Detail about Slicer integration
+## Details about Slicer integration
 
 SlicerArduino creates a vtkMRMLScriptedModuleNode() and use it for storing data coming from the board.
 In this way will be possible to take advantage of the notify mechanism already implemented into the vtkMRMLNode.
