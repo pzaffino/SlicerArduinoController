@@ -10,7 +10,6 @@
 ## Receiving data from Arduino:
 
 In this example, a distance sensor (SHARP 2Y0A2) will be used to edit a Slicer linear transformation.
-
 The transformation can be used to translate whatever model/volume in Slicer.
 
 The code for Arduino is the following (sensor connected to pin A0):
