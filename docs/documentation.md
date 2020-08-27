@@ -49,3 +49,11 @@ class ArduinoAppTemplate():
   def sendDataToArduino(self, message):
     messageSent = slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage(message)
 ```
+
+## Detail about Slicer integration
+
+SlicerArduino creates a vtkMRMLScriptedModuleNode() and use it for storing data coming from the board.
+In this way will be possible to take advantage of the notify mechanism already implemented into the vtkMRMLNode.
+The user has just to observe the node and so it will be possible to execute a custom function when a node parameter changes (because it contains a new valure arrived from the board).
+
+Without this system the data read from Arduino would be almost useless, and the integration/cooperation with the Slicer environment strongly limited.
