@@ -74,7 +74,7 @@ class ExternalTransformationController():
 controller = ExternalTransformationController()
 ```
 
-Once the link has been established by using of SlicerArduino, the data coming from the sensor (move a hand back and forward) will edit the transformation node that in turn will move the associated model/volume.
+Once the link has been established by using of SlicerArduino, the data coming from the sensor (move a hand back and forward) will edit the transformation node that, in turn, will move the associated model/volume.
 
 
 ## Send data to Arduino:
