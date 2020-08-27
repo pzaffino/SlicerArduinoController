@@ -12,6 +12,9 @@
 In this example, a distance sensor (SHARP 2Y0A2) will be used to edit a Slicer linear transformation.
 The transformation can be used to move whatever model/volume in Slicer.
 
+The code for Arduino is the following:
+(sensor connected to pin A0)
+
 ```C
 
 int sensorpin = 0;                      // analog pin used to connect the sharp sensor
@@ -31,6 +34,9 @@ void loop()
 }
 
 ```
+
+The Python code to be written into the Slicer shell is the following:
+(set the proper transformation ID according to the specific Slicer scene)
 
 ```python
 class ExternalTransformationController():
@@ -68,6 +74,8 @@ class ExternalTransformationController():
 # Instantiate object, this will enable the quasi-real time probe control
 controller = ExternalTransformationController()
 ```
+
+Once the link has been established by using of SlicerArduino, the data coming from the sensor (move a hand back and forward) will edit the transformation node that in turn will move the associated model/volume.
 
 
 ## Send data to Arduino:
