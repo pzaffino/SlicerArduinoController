@@ -12,8 +12,7 @@
 In this example, a distance sensor (SHARP 2Y0A2) will be used to edit a Slicer linear transformation.
 The transformation can be used to move whatever model/volume in Slicer.
 
-The code for Arduino is the following:
-(sensor connected to pin A0)
+The code for Arduino is the following (sensor connected to pin A0):
 
 ```C
 
@@ -79,3 +78,75 @@ Once the link has been established by using of SlicerArduino, the data coming fr
 
 
 ## Send data to Arduino:
+
+In this example a linear servomotor (Actuonix L16 Actuator 50mm) is controlled by using a translation computed by Slicer.
+The esample mimics a radiotherapy couch correction on basis of the alignment of daily and planning CTs.
+
+The Arduino code is:
+```C
+/*
+ * range servo ms 1000 -- 2000 -> 0 -- 4.8 cm
+ * 1 ms -> 0.0048 cm
+ * 1 cm -> 208.3 ms
+ */
+
+//Includes
+#include <Servo.h>
+
+//Defines
+#define LINEARACTUATORPIN 9      //Linear Actuator Digital Pin
+
+Servo LINEARACTUATOR;           // create servo objects to control the linear actuator
+
+int minValue = 1000;
+int maxValue = 2000;
+float translation;
+
+void setup()
+{  
+  Serial.begin(9600);
+  
+  //initialize servo/linear actuator objects
+  LINEARACTUATOR.attach(LINEARACTUATORPIN, minValue, maxValue);   // attaches/activates the linear actuator as a servo object    
+ 
+  //use the writeMicroseconds to set the linear actuators to their default positions
+  LINEARACTUATOR.writeMicroseconds(minValue);
+  delay(1000);
+
+}
+
+void loop()
+{
+  delay(100);
+
+  if (Serial.available() > 0)
+  {
+    translation = Serial.parseFloat() * 0.1; // Slicer use mm
+    //Serial.println(translation);
+      
+    if (translation <= 4.8) // max displacement
+    {
+      LINEARACTUATOR.writeMicroseconds(minValue + (translation*208.3));
+      }    
+    
+    }
+
+}
+
+```
+
+The Python code to be written into the Slicer shell is (set the correct transformation node ID):
+
+```python
+# Get transformation node from Slicer scene
+transformation_node = slicer.mrmlScene.GetNodeByID("vtkMRMLLinearTransformNode4")
+
+# Get transformation matrix from node
+transformation_matrix = transformation_node.GetMatrixTransformFromParent()
+
+# Get z translation
+z_translation = transformation_matrix.GetElement(2,3)
+
+# Send translation to Arduino board
+slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage("%.3f" % (z_translation))
+```
