@@ -63,11 +63,13 @@ class ExternalTransformationController():
     """
     
     # Edit matrix according to the data read from the distance sensor
-    self.matrix.SetElement(1, 3, float(self.ArduinoNode.GetParameter("Data")))
+    self.matrix.SetElement(2, 3, float(self.ArduinoNode.GetParameter("Data")))
     
     # Update transformation node
     self.transform.SetMatrixTransformToParent(self.matrix)
-
+    
+    # Refresh Slicer views
+    slicer.util.resetSliceViews()
 
 # Instantiate object, this will enable the quasi-real time probe control
 controller = ExternalTransformationController()
