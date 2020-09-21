@@ -3,6 +3,7 @@
 * [Home](https://pzaffino.github.io/SlicerArduinoController/index)
 * [Documentation](https://pzaffino.github.io/SlicerArduinoController/documentation)
 * [Developers](https://pzaffino.github.io/SlicerArduinoController/developers)
+* [How to cite SlicerArduino](https://pzaffino.github.io/SlicerArduinoController/citations)
 
 # Examples
 
