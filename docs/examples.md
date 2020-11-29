@@ -13,6 +13,8 @@
 In this example, a distance sensor (SHARP 2Y0A2) will be used to edit a Slicer linear transformation.
 The transformation can be used to translate whatever model/volume in Slicer.
 
+Exemplary Slicer scene can be downloaded from [here](https://github.com/pzaffino/SlicerArduinoController/blob/master/docs/extra/SlicerArduino_US_probe_example.mrb?raw=true).
+
 The code for Arduino is the following (sensor connected to pin A0):
 
 ```cpp
