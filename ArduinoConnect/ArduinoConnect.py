@@ -124,7 +124,7 @@ class ArduinoPlotter():
 # Arduino Monitor
 #
 
-class ArduinoMonitor():
+class ArduinoMonitor(ScriptedLoadableModule):
   """ Class for plotting arduno data into a separate window
   """
   def __init__(self):
@@ -152,6 +152,76 @@ class ArduinoMonitor():
     # Show always the last message
     verticalScrollBar = self.monitor.verticalScrollBar()
     verticalScrollBar.setValue(verticalScrollBar.maximum)
+    
+
+#
+# ArduinoPedalBoard Class dev. Domenico Leuzzi
+#
+
+class ArduinoPedalBoard(ScriptedLoadableModule):
+
+  def __init__(self):
+  
+    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
+    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.pedalBoardIsPushed)
+    
+    self.monitor = qt.QTextEdit()
+    self.monitor.setWindowTitle("Arduino monitor")
+    self.monitor.setReadOnly(True)
+    self.monitor.show()
+    
+    # Get Slice Node from Scene
+    self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
+  
+
+  def pedalBoardIsPushed(self, caller, event):
+  
+    message = self.ArduinoNode.GetParameter("Data")
+    self.monitor.insertPlainText(message)
+       
+    #
+    # Control Button Pressed From Arduino
+    
+    if(message>str(19) and message <str(21)): #N.B. Serial Value == 20
+    
+        print("Button SET Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset
+        self.red_Slice.SetSliceOffset(int(self.red_Slice.GetSliceOffset())*1.01) #N.B. before  slice_Offset=1275 (Variable for origin Slice Offset)
+           
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())
+        
+    if(message>=str(0) and message<str(1)):
+    
+        print("Button DOWN Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    
+                
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
+        
+        
+    elif(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
+    
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+0.5)    
+                
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())  
+    
+          
+
+    # Show always the last message
+    verticalScrollBar = self.monitor.verticalScrollBar()
+    verticalScrollBar.setValue(verticalScrollBar.maximum) 
+  
+    # Refresh Slicer Views
+    #slicer.util.resetSliceViews()
+
 
 #
 # ArduinoConnect
@@ -195,6 +265,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.config = json.load(f)
 
     self.logic = ArduinoConnectLogic()
+    
+    #self.Arduino_DomenicoLeuzzi= ArduinoDomenico()    #EDIT BY DOMENICO LEUZZI
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
@@ -240,14 +312,17 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       return arduinoIDEExe
 
   def onConnectButton(self, toggle):
-
+  
+  
     # clicked connect and the device list has elements
     if toggle and self.ui.portSelectorComboBox.currentText != "":
 
         self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,
                                             self.ui.baudSelectorComboBox.currentText,
                                             self.ui.samplesPerSecondText.text)
-
+                                            
+        #self.Arduino_DomenicoLeuzzi= ArduinoDomenico()    #EDIT BY DOMENICO LEUZZI
+        
         if self.connected:
           self.ui.connectButton.setText("Disconnect")
           self.ui.connectButton.setStyleSheet("background-color:#ff0000")
@@ -256,6 +331,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
           self.ui.detectDevice.setEnabled(False)
           self.ui.sendButton.setEnabled(True)
           self.ui.samplesPerSecondText.setEnabled(False)
+          #self.ArduinoDomenico.doSomethingWhenNewDataIsRead(self,caller,event) #EDIT BY DOMENICO LEUZZI
+         #print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data"))) #EDIT BY DOMENICO LEUZZI
         else:
           self.deviceError("Device not found", "Impssible to connect the selected device.", "critical")
           self.ui.connectButton.setChecked(False)
@@ -310,7 +387,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.logic.sendMessage(message)
 
   def onMonitorButton(self, clicked):
-    monitor = ArduinoMonitor()
+    #monitor = ArduinoMonitor() old code
+    monitor = ArduinoPedalBoard()
 
   def onPlotterButton(self, clicked):
     if clicked and self.plotter is None:
