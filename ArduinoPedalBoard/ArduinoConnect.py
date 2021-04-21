@@ -265,8 +265,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.config = json.load(f)
 
     self.logic = ArduinoConnectLogic()
-    
-    #self.Arduino_DomenicoLeuzzi= ArduinoDomenico()    #EDIT BY DOMENICO LEUZZI
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
@@ -285,10 +283,16 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.connectButton.connect('toggled(bool)', self.onConnectButton)
     self.ui.setIDEButton.connect('clicked(bool)', self.onSetIDEButton)
     self.ui.runIDEButton.connect('clicked(bool)', self.onRunIDEButton)
-    self.ui.sendButton.connect('clicked(bool)', self.onSendButton)
+    #self.ui.sendButton.connect('clicked(bool)', self.onSendButton)
     self.ui.monitorButton.connect('clicked(bool)', self.onMonitorButton)
     self.ui.plotterButton.connect('toggled(bool)', self.onPlotterButton)
     self.ui.samplesToPlotText.textChanged.connect(self.onSamplesToPlot)
+    
+    #Edit By Domenico Leuzzi
+    self.ui.button1_Choice.connect('clicked(bool)', self.onButton1_Task)
+    self.ui.button2_Choice.connect('clicked(bool)', self.onButton2_Task)
+    self.ui.button3_Choice.connect('clicked(bool)', self.onButton3_Task)
+    self.ui.setTask.connect('clicked(bool)', self.onSetTaskButtons)
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -320,8 +324,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
         self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,
                                             self.ui.baudSelectorComboBox.currentText,
                                             self.ui.samplesPerSecondText.text)
-                                            
-        #self.Arduino_DomenicoLeuzzi= ArduinoDomenico()    #EDIT BY DOMENICO LEUZZI
         
         if self.connected:
           self.ui.connectButton.setText("Disconnect")
@@ -329,10 +331,9 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
           self.ui.portSelectorComboBox.setEnabled(False)
           self.ui.baudSelectorComboBox.setEnabled(False)
           self.ui.detectDevice.setEnabled(False)
-          self.ui.sendButton.setEnabled(True)
+          #self.ui.sendButton.setEnabled(True)
           self.ui.samplesPerSecondText.setEnabled(False)
-          #self.ArduinoDomenico.doSomethingWhenNewDataIsRead(self,caller,event) #EDIT BY DOMENICO LEUZZI
-         #print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data"))) #EDIT BY DOMENICO LEUZZI
+
         else:
           self.deviceError("Device not found", "Impssible to connect the selected device.", "critical")
           self.ui.connectButton.setChecked(False)
@@ -353,7 +354,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.ui.portSelectorComboBox.setEnabled(True)
       self.ui.baudSelectorComboBox.setEnabled(True)
       self.ui.detectDevice.setEnabled(True)
-      self.ui.sendButton.setEnabled(False)
+      #self.ui.sendButton.setEnabled(False)
       self.ui.samplesPerSecondText.setEnabled(True)
 
   def onDetectDeviceButton(self, clicked):
@@ -368,6 +369,46 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     elif len(devices)>0:
         for device in devices:
             self.ui.portSelectorComboBox.addItem(device)
+            
+    
+  def onButton1_Task(self, clicked):
+    self.ui.button1_Choice.setEnabled(True)
+    #print("Button 1 tasker ok!")
+    
+    #
+    #to continue *Arduino Code (or Selection View)*
+    #
+    
+  def onButton2_Task(self, clicked):
+    self.ui.button2_Choice.setEnabled(True)
+    #print("Button 2 tasker ok!")
+    
+    #
+    #to continue *Arduino Code (or Selection View)*
+    #
+    
+  def onButton3_Task(self, clicked):
+    self.ui.button3_Choice.setEnabled(True)
+    #print("Button 3 tasker ok!")
+    
+    #
+    #to continue *Arduino Code (or Selection View)*
+    #
+    
+  def onSetTaskButtons(self, clicked):
+    # clicked Set Tasker and the operation list for button
+    if self.ui.button1_Choice.currentText == "test":
+        print("Test Message Button1 Tasker ok!") 
+        
+    if self.ui.button2_Choice.currentText == "test":
+        print("Test Message Button2 Tasker ok!") 
+        
+    if self.ui.button3_Choice.currentText == "test":
+        print("Test Message Button3 Tasker ok!") 
+        
+    #
+    #FARE TUTTI GLI ALTRI CASI
+    #
 
   def onSetIDEButton(self, clicked):
     dialog = qt.QFileDialog()
