@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>616</height>
+    <width>265</width>
+    <height>654</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -184,10 +184,90 @@
      </property>
     </widget>
    </item>
-   <item row="16" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="17" column="1">
+    <widget class="QComboBox" name="button2_Choice">
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Slice Red Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Red Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Yellow Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Yellow Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Green Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Green Offset -</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="18" column="1">
+    <widget class="QComboBox" name="button3_Choice">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Slice Red Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Red Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Yellow Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Yellow Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Green Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Green Offset -</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="19" column="0" colspan="2">
+    <widget class="QPushButton" name="resetTask">
      <property name="text">
-      <string>Button 1</string>
+      <string>Reset all Tasks</string>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -254,99 +334,78 @@
      </property>
     </widget>
    </item>
-   <item row="17" column="0">
-    <widget class="QLabel" name="label_3">
+   <item row="16" column="1">
+    <widget class="QComboBox" name="button1_Choice">
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Slice Red Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Red Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Yellow Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Yellow Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Green Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Green Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Change Viewer</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="16" column="0">
+    <widget class="QPushButton" name="SetButton1">
      <property name="text">
-      <string>Button 2</string>
+      <string>Set Button 1</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="autoRepeat">
+      <bool>false</bool>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0">
+    <widget class="QPushButton" name="SetButton2">
+     <property name="text">
+      <string>Set Button 2</string>
      </property>
     </widget>
    </item>
    <item row="18" column="0">
-    <widget class="QLabel" name="label_4">
+    <widget class="QPushButton" name="SetButton3">
      <property name="text">
-      <string>Button 3</string>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="1">
-    <widget class="QComboBox" name="button1_Choice">
-     <item>
-      <property name="text">
-       <string>Slice Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>test</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Change Viewer</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="17" column="1">
-    <widget class="QComboBox" name="button2_Choice">
-     <item>
-      <property name="text">
-       <string>Slice Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>test</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Change Viewer</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="18" column="1">
-    <widget class="QComboBox" name="button3_Choice">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Slice Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>test</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Change View</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="19" column="0" colspan="2">
-    <widget class="QPushButton" name="setTask">
-     <property name="text">
-      <string>Set Task</string>
+      <string>TEST Change</string>
      </property>
     </widget>
    </item>

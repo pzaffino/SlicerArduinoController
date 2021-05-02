@@ -20,6 +20,7 @@ include(${Slicer_USE_FILE})
 #-----------------------------------------------------------------------------
 # Extension modules
 add_subdirectory(ArduinoConnect)
+add_subdirectory(ArduinoPedalBoard)
 ## NEXT_MODULE
 
 #-----------------------------------------------------------------------------
