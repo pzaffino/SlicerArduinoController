@@ -453,6 +453,7 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
        
     #
     # Control Button Pressed From Arduino
+    slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
     
     if(message>str(19) and message <str(21)): #N.B. Serial Value == 20
     
@@ -461,13 +462,18 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
         # Changing Slice Node Offset
         #self.red_Slice.SetSliceOffset(int(self.red_Slice.GetSliceOffset())*1.01) #N.B. before  slice_Offset=1275 (Variable for origin Slice Offset)
         
-        self.c+=1  
+        #slicer.mrmlScene.InsertAfterNode(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed"),slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow"))
+        #slicer.mrmlScene.UpdateNodeChangedIDs()
+        print("ok")   
+
+        self.c+=1
         
         if(self.c==1):   #slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID()=="vtkMRMLSliceNodeRed"
             # Set Slice Node from Scene (Red)
             
             self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID(),"\n")  
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
             
             #self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
             #print("Nodo riconosciuto",slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID(),"\n")            
@@ -476,47 +482,33 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
             # Set Slice Node from Scene (Yellow)
             self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID(),"\n")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
             
         if(self.c==3):
             # Set Slice Node from Scene (Green)
             self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen").GetID(),"\n")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
             
             self.c=0
-        '''       
-        if(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID()=="vtkMRMLSliceNodeYellow"):
-            # Set Slice Node from Scene (Yellow)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
-            print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen").GetID(),"\n")
-            
-        if(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen").GetID()=="vtkMRMLSliceNodeGreen"):
-            # Set Slice Node from Scene (Green)
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")   
-            print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID(),"\n")
-            
-            '''      
-          
-            
+ 
         
     if(message>=str(0) and message<str(1)):
     
-        self.c=0 #counter check for change views
+        #self.c=0 #counter check for change views
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
         # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    #N.B. Fare anche per le altre slice
                 
         # Print Slice Node Offset
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
         
-        #Additing message Arduino in List 
-        #self.list_Message.append(message)
-        
         
     elif(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
     
-        self.c=0 #counter check for change views
+        #self.c=0 #counter check for change views
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -526,10 +518,6 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
         # Print Slice Node Offset
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset())  
         
-        #Additing message Arduino in List 
-        #self.list_Message.append(message)
-
-    #print(self.list_Message)
 
 #
 # ArduinoConnect
