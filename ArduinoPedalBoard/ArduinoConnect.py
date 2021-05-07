@@ -439,8 +439,8 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
     
     # Get Slice Node from Scene
     self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-    #self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-    #self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
+    self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
+    self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
     
     #self.list_Message=[] #to control consecutive values are equals
     
@@ -474,6 +474,7 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
             self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID(),"\n")  
             slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
+            print(slicer.app.layoutManager().layoutLogic().GetLayoutNode().GetID())
             
             #self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
             #print("Nodo riconosciuto",slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID(),"\n")            
@@ -483,32 +484,41 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
             self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID(),"\n")
             slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
+            print(slicer.app.layoutManager().layoutLogic().GetLayoutNode().GetID())
             
         if(self.c==3):
             # Set Slice Node from Scene (Green)
             self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen").GetID(),"\n")
             slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+            print(slicer.app.layoutManager().layoutLogic().GetLayoutNode().GetID())
             
             self.c=0
  
         
-    if(message>=str(0) and message<str(1)):
-    
-        #self.c=0 #counter check for change views
+    if((message>=str(0) and message<str(1)) and self.c==1):
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
         # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    #N.B. Fare anche per le altre slice
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    #N.B. Fare anche per le altre Views
                 
         # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
         
+        
+    if((message>=str(0) and message<str(1)) and self.c==2):  #N.B. DISTINGUERE BENE I CASI TRA GIALLO E RED (VEDI API)
+    
+        print("Button DOWN Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-0.5)    #N.B. Fare anche per le altre Views
+                
+        # Print Slice Node Offset
+        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
+          
         
     elif(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
-    
-        #self.c=0 #counter check for change views
     
         print("Button UP Pressed, [Operation num.]:",message)
         
