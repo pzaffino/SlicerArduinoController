@@ -442,9 +442,7 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
     self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
     self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
     
-    #self.list_Message=[] #to control consecutive values are equals
-    
-    self.c=0 #counter check for change views
+    self.c=0 #Counter Check Value for change views
         
   def button3IsPushed(self, caller, event):
   
@@ -453,31 +451,20 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
        
     #
     # Control Button Pressed From Arduino
-    slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
+    #slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
     
-    if(message>str(19) and message <str(21)): #N.B. Serial Value == 20
-    
-        #print("Button SET Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset
-        #self.red_Slice.SetSliceOffset(int(self.red_Slice.GetSliceOffset())*1.01) #N.B. before  slice_Offset=1275 (Variable for origin Slice Offset)
-        
-        #slicer.mrmlScene.InsertAfterNode(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed"),slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow"))
-        #slicer.mrmlScene.UpdateNodeChangedIDs()
-        print("ok")   
+    if(message>str(19) and message <str(21)): #N.B. Serial Value == 20    
 
+        # Counter Check Value Increase
         self.c+=1
         
-        if(self.c==1):   #slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID()=="vtkMRMLSliceNodeRed"
+        if(self.c==1):   
             # Set Slice Node from Scene (Red)
             
             self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
             print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID(),"\n")  
             slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-            print(slicer.app.layoutManager().layoutLogic().GetLayoutNode().GetID())
-            
-            #self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            #print("Nodo riconosciuto",slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID(),"\n")            
+            print(slicer.app.layoutManager().layoutLogic().GetLayoutNode().GetID())           
        
         if(self.c==2):
             # Set Slice Node from Scene (Yellow)
@@ -493,32 +480,47 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
             slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
             print(slicer.app.layoutManager().layoutLogic().GetLayoutNode().GetID())
             
-            self.c=0
+        if(self.c==4):
+            # Default LayoutUpView
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
+            
+            self.c=0    #Reset Counter Check value 
  
         
-    if((message>=str(0) and message<str(1)) and self.c==1):
+    if((message>=str(0) and message<str(1)) and self.c==1):   #Red Case
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
         # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    #N.B. Fare anche per le altre Views
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    
                 
         # Print Slice Node Offset
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
         
         
-    if((message>=str(0) and message<str(1)) and self.c==2):  #N.B. DISTINGUERE BENE I CASI TRA GIALLO E RED (VEDI API)
+    if((message>=str(0) and message<str(1)) and self.c==2):  #Yellow Case
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
         # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-0.5)    #N.B. Fare anche per le altre Views
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-0.5)    
                 
         # Print Slice Node Offset
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
+        
+        
+    if((message>=str(0) and message<str(1)) and self.c==3):  #Green Case
+    
+        print("Button DOWN Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-0.5)   
+                
+        # Print Slice Node Offset
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
           
         
-    elif(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
+    if((message>=str(5) and message<str(6)) and self.c==1): #N.B. Serial Value == 5 #Red Case
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -526,7 +528,29 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
         self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+0.5)    
                 
         # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())  
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
+        
+        
+    if((message>=str(5) and message<str(6)) and self.c==2):  #Yellow Case
+    
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+0.5)    
+                
+        # Print Slice Node Offset
+        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
+        
+        
+    if((message>=str(5) and message<str(6)) and self.c==3):  #Green Case
+    
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+0.5)    
+                
+        # Print Slice Node Offset
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
         
 
 #
