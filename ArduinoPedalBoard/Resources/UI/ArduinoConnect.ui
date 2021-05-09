@@ -180,7 +180,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Selector task</string>
+      <string>Selector Task</string>
      </property>
     </widget>
    </item>
@@ -191,32 +191,17 @@
      </property>
      <item>
       <property name="text">
-       <string>Slice Red Offset +</string>
+       <string>Slice Offset -</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Slice Red Offset -</string>
+       <string>Slice Offset +</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Slice Yellow Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Yellow Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Green Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Green Offset -</string>
+       <string>Change Viewer</string>
       </property>
      </item>
     </widget>
@@ -231,32 +216,17 @@
      </property>
      <item>
       <property name="text">
-       <string>Slice Red Offset +</string>
+       <string>Slice Offset +</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Slice Red Offset -</string>
+       <string>Slice Offset -</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Slice Yellow Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Yellow Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Green Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Green Offset -</string>
+       <string>Change Viewer</string>
       </property>
      </item>
     </widget>
@@ -341,37 +311,17 @@
      </property>
      <item>
       <property name="text">
-       <string>Slice Red Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Red Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Yellow Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Yellow Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Green Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Green Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string>Change Viewer</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset -</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset +</string>
       </property>
      </item>
     </widget>
@@ -405,7 +355,7 @@
    <item row="18" column="0">
     <widget class="QPushButton" name="SetButton3">
      <property name="text">
-      <string>TEST Change</string>
+      <string>Set Button 3</string>
      </property>
     </widget>
    </item>
