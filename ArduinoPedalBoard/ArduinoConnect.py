@@ -877,7 +877,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.SetButton2.connect('clicked(bool)', self.onSetButton2)
     self.ui.SetButton3.connect('clicked(bool)', self.onSetButton3)
     
-    self.ui.resetTask.connect('clicked(bool)',self.onResetTask)
+    #self.ui.resetTask.connect('clicked(bool)',self.onResetTask)
 
 
     # Add vertical spacer
@@ -960,11 +960,18 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def onSetButton1(self, clicked): 
 
     # Alert
-    if(((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
+    if(((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
         
         self.deviceError("Operation Not Valid.", "Changer Views are duplicate. You must choise only one 'Changer'.", "critical")
         
-    else:
+        
+    # Warning Error
+    #if((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
+    
+     #   self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
+        
+        
+    elif(self.ui.button1_Choice.currentText=="Change Viewer"):
  
         ArduinoPedalBoardViewsButtonRight()
 
@@ -983,16 +990,30 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
  
 
   def onSetButton2(self, clicked):  
+   
+    # Critical Error
+    if(((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button1_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
+        
+        self.deviceError("Operation Not Valid.", "Changer Views are duplicate. You must choise only one 'Changer'.", "critical")
+    
+    
+    # Warning Error
+    #if((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
+    
+        #self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
+        
+        
+    elif(self.ui.button2_Choice.currentText=="Change Viewer"):
  
-    ArduinoPedalBoardViewsButtonCentral()
+        ArduinoPedalBoardViewsButtonCentral()
 
-    self.ui.button1_Choice.setEnabled(False)
-    self.ui.button2_Choice.setEnabled(False)
-    self.ui.button3_Choice.setEnabled(False)
+        self.ui.button1_Choice.setEnabled(False)
+        self.ui.button2_Choice.setEnabled(False)
+        self.ui.button3_Choice.setEnabled(False)
 
-    #Change Text in combobox
-    self.ui.button1_Choice.setCurrentText("Slice Offset +")
-    self.ui.button3_Choice.setCurrentText("Slice Offset -")
+        #Change Text in combobox
+        self.ui.button1_Choice.setCurrentText("Slice Offset +")
+        self.ui.button3_Choice.setCurrentText("Slice Offset -")
           
           
     #
@@ -1001,28 +1022,42 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   
            
   def onSetButton3(self, clicked):
-
-    ArduinoPedalBoardViews()
-
-    self.ui.button1_Choice.setEnabled(False)
-    self.ui.button2_Choice.setEnabled(False)
-    self.ui.button3_Choice.setEnabled(False)
-
-    #Change Text in combobox
-    self.ui.button1_Choice.setCurrentText("Slice Offset +")
-    self.ui.button2_Choice.setCurrentText("Slice Offset -")
+  
+    # Alert
+    if(((self.ui.button3_Choice.currentText=="Change Viewer") and (self.ui.button1_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
+        
+        self.deviceError("Operation Not Valid.", "Changer Views are duplicate. You must choise only one 'Changer'.", "critical")
+      
+      
+    # Warning Error
+    #if((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
     
+        #self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
+        
+        
+    elif(self.ui.button3_Choice.currentText=="Change Viewer"):
+
+        ArduinoPedalBoardViews()
+
+        self.ui.button1_Choice.setEnabled(False)
+        self.ui.button2_Choice.setEnabled(False)
+        self.ui.button3_Choice.setEnabled(False)
+
+        #Change Text in combobox
+        self.ui.button1_Choice.setCurrentText("Slice Offset +")
+        self.ui.button2_Choice.setCurrentText("Slice Offset -")
     
+  '''  
     #
     # Method onResetTask
     #
-    
+ 
   def onResetTask(self,clicked):
   
     self.ui.button1_Choice.setEnabled(True)
     self.ui.button2_Choice.setEnabled(True)
     self.ui.button3_Choice.setEnabled(True)
-    
+  '''  
     
 
   def onSetIDEButton(self, clicked):

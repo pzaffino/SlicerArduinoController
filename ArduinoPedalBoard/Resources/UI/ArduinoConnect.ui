@@ -184,152 +184,10 @@
      </property>
     </widget>
    </item>
-   <item row="17" column="1">
-    <widget class="QComboBox" name="button2_Choice">
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Slice Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Change Viewer</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="18" column="1">
-    <widget class="QComboBox" name="button3_Choice">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Slice Offset +</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Change Viewer</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="19" column="0" colspan="2">
-    <widget class="QPushButton" name="resetTask">
-     <property name="text">
-      <string>Reset all Tasks</string>
-     </property>
-     <property name="autoExclusive">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="20" column="0" colspan="2">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="22" column="0">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Monitor</string>
-     </property>
-    </widget>
-   </item>
-   <item row="23" column="0" colspan="2">
-    <widget class="QPushButton" name="monitorButton">
-     <property name="text">
-      <string>Print data into a window</string>
-     </property>
-    </widget>
-   </item>
-   <item row="24" column="0" colspan="2">
-    <widget class="QPushButton" name="plotterButton">
-     <property name="text">
-      <string>Plot data</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="25" column="0">
-    <widget class="QLabel" name="labelSamples">
-     <property name="text">
-      <string>Samples</string>
-     </property>
-    </widget>
-   </item>
-   <item row="25" column="1">
-    <widget class="QLineEdit" name="samplesToPlotText">
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="1">
-    <widget class="QComboBox" name="button1_Choice">
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>Change Viewer</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset -</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Slice Offset +</string>
-      </property>
-     </item>
-    </widget>
-   </item>
    <item row="16" column="0">
     <widget class="QPushButton" name="SetButton1">
      <property name="text">
-      <string>Set Button 1</string>
+      <string>Button 1</string>
      </property>
      <property name="checkable">
       <bool>false</bool>
@@ -345,17 +203,134 @@
      </property>
     </widget>
    </item>
+   <item row="16" column="1">
+    <widget class="QComboBox" name="button1_Choice">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Select Option</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Change Viewer</string>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item row="17" column="0">
     <widget class="QPushButton" name="SetButton2">
      <property name="text">
-      <string>Set Button 2</string>
+      <string>Button 2</string>
      </property>
+    </widget>
+   </item>
+   <item row="17" column="1">
+    <widget class="QComboBox" name="button2_Choice">
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Select Option</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Change Viewer</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="18" column="0">
     <widget class="QPushButton" name="SetButton3">
      <property name="text">
-      <string>Set Button 3</string>
+      <string>Button 3</string>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="1">
+    <widget class="QComboBox" name="button3_Choice">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+     <item>
+      <property name="text">
+       <string>Select Option</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Change Viewer</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="19" column="0" colspan="2">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="21" column="0">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Monitor</string>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="0" colspan="2">
+    <widget class="QPushButton" name="monitorButton">
+     <property name="text">
+      <string>Print data into a window</string>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="0" colspan="2">
+    <widget class="QPushButton" name="plotterButton">
+     <property name="text">
+      <string>Plot data</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="0">
+    <widget class="QLabel" name="labelSamples">
+     <property name="text">
+      <string>Samples</string>
+     </property>
+    </widget>
+   </item>
+   <item row="24" column="1">
+    <widget class="QLineEdit" name="samplesToPlotText">
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
