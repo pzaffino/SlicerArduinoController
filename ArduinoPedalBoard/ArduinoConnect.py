@@ -158,276 +158,6 @@ class ArduinoMonitor(ScriptedLoadableModule):
 # ArduinoPedalBoard Class dev. Domenico Leuzzi
 #
 
-class ArduinoPedalBoard(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.pedalBoardIsPushed)
-    
-    self.monitoring = qt.QTextEdit()
-    self.monitoring.setWindowTitle("Arduino monitor")
-    self.monitoring.setReadOnly(True)
-    self.monitoring.show()   
-    
-    # Get Slice Node from Scene
-    self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-  
-
-  def pedalBoardIsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    self.monitoring.insertPlainText(message)
-       
-    #
-    # Control Button Pressed From Arduino
-    
-    #if((message>str(19) and message <str(21)) and(self.ui.button2_Choice.currentText == "test")): #N.B. Serial Value == 20
-    if (message>str(19) and message <str(21)): 
-    
-        print("Button SET Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset
-        self.red_Slice.SetSliceOffset(int(self.red_Slice.GetSliceOffset())*1.01) #N.B. before  slice_Offset=1275 (Variable for origin Slice Offset)           
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())
-        
-        
-    if(message>=str(0) and message<str(1)):
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-0.5)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
-        
-        
-    elif(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+0.5)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())  
-          
-
-    # Show always the last message
-    verticalScrollBar = self.monitoring.verticalScrollBar()
-    verticalScrollBar.setValue(verticalScrollBar.maximum) 
-  
-    # Refresh Slicer Views
-    #slicer.util.resetSliceViews()
-    
-    
-#
-# ArduinoPedalBoard off+
-#
-class ArduinoPedalBoardOffPlus(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button1IsPushed)
-    
-    # Get Slice Node from Scene
-    self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-    
-  def button1IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    if(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
-    
-        print("Button UP Pressed, ARDUINOPEDALPLUS red [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+1.0)  
-        
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())
-
-
-#
-# ArduinoPedalBoard off-
-#
-class ArduinoPedalBoardOffMinus(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button1IsPushed)
-    
-    # Get Slice Node from Scene
-    self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-    
-  def button1IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    if(message>=str(0) and message<str(1)): #N.B. Serial Value == 0
-    
-        print("Button DOWN Pressed, ARDUINOPEDALMINUS red [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-1.0)  
-        
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())
-
-#
-# ArduinoPedalBoard Offset Yellow Plus
-#
-class ArduinoPedalBoardOffYellPlus(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button1IsPushed)
-    
-    # Get Slice Node from Scene
-    self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-    
-  def button1IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    if(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
-    
-        print("Button UP Pressed, ARDUINOPEDALPLUS yellow [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+1.0)  
-        
-        # Print Slice Node Offset
-        print("Offset yellow Slice:",self.yellow_Slice.GetSliceOffset())
-        
-        
-#
-# ArduinoPedalBoard Yellow offset -
-#
-class ArduinoPedalBoardOffYellMinus(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button1IsPushed)
-    
-    # Get Slice Node from Scene
-    self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-    
-  def button1IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    if(message>=str(0) and message<str(1)): #N.B. Serial Value == 0
-    
-        print("Button DOWN Pressed, ARDUINOPEDALMINUS yellow [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-1.0)  
-        
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())
-
-
-#
-# ArduinoPedalBoard Offset Green Plus
-#
-class ArduinoPedalBoardOffGreenPlus(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button1IsPushed)
-    
-    # Get Slice Node from Scene
-    self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
-    
-  def button1IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    if(message>=str(5) and message<str(6)): #N.B. Serial Value == 5
-    
-        print("Button UP Pressed, ARDUINOPEDALPLUS green [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+10.1)  
-        
-        # Print Slice Node Offset
-        print("Offset green Slice:",self.green_Slice.GetSliceOffset())
-  
-  
-#
-# ArduinoPedalBoard Green offset -
-#
-class ArduinoPedalBoardOffGreenMinus(ScriptedLoadableModule):
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button1IsPushed)
-    
-    # Get Slice Node from Scene
-    self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
-    
-  def button1IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    if(message>=str(0) and message<str(1)): #N.B. Serial Value == 0
-    
-        print("Button DOWN Pressed, ARDUINOPEDALMINUS green [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-10.1)  
-        
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
-     
-     
-     
-#
-# ArduinoPedalBoard Change Views Slice
-#
-class ArduinoPedalBoardChangeSlice(ScriptedLoadableModule):
-
-
-  def __init__(self):
-  
-    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button3IsPushed)
-    
-        
-  def button3IsPushed(self, caller, event):
-  
-    message= self.ArduinoNode.GetParameter("Data")
-    
-    
-    if(message>=str(20) and message<str(21)): #N.B. Serial Value == 20
-      
-        print("Button CHANGE VIEW Pressed, ARDUINOPEDALCHANGEViews [Operation num.]:",message,"\n")
-        
-        # Changing Slice View 
-        self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-        print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow").GetID())
-
-
-        if(c>1):
-            # Changing Slice View 
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")
-            print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen").GetID())
-        
-    self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-    print(slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed").GetID())
-    print("Counter control",c)
-     
-    
-
 
 class ArduinoPedalBoardViews(ScriptedLoadableModule):
 
@@ -451,7 +181,6 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
        
     #
     # Control Button Pressed From Arduino
-    #slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
     
     if(message>str(19) and message <str(21)): #N.B. Serial Value == 20    
 
@@ -551,7 +280,8 @@ class ArduinoPedalBoardViews(ScriptedLoadableModule):
                 
         # Print Slice Node Offset
         print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
-        
+     
+     
 
 #--------------- Second Class (Arduino Button Central)
 
@@ -573,11 +303,9 @@ class ArduinoPedalBoardViewsButtonCentral(ScriptedLoadableModule):
   def button2IsPushed(self, caller, event):
   
     message = self.ArduinoNode.GetParameter("Data")
-    #self.monitor.insertPlainText(message)
        
     #
     # Control Button Pressed From Arduino
-    #slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
     
     if(message>=str(0) and message <str(1)): #N.B. Serial Value == 0    
 
@@ -679,7 +407,6 @@ class ArduinoPedalBoardViewsButtonCentral(ScriptedLoadableModule):
         print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
 
 
-
 #--------------- Third Class (Arduino Button Right)
 
 class ArduinoPedalBoardViewsButtonRight(ScriptedLoadableModule):
@@ -700,11 +427,9 @@ class ArduinoPedalBoardViewsButtonRight(ScriptedLoadableModule):
   def button1IsPushed(self, caller, event):
   
     message = self.ArduinoNode.GetParameter("Data")
-    #self.monitor.insertPlainText(message)
        
     #
     # Control Button Pressed From Arduino
-    #slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
     
     if(message>=str(5) and message <str(6)): #N.B. Serial Value == 5    
 
@@ -871,14 +596,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.ui.samplesToPlotText.textChanged.connect(self.onSamplesToPlot)  
     
     #Edit By Domenico Leuzzi
- 
     #(NEW BUTTONS)
     self.ui.SetButton1.connect('clicked(bool)', self.onSetButton1) 
     self.ui.SetButton2.connect('clicked(bool)', self.onSetButton2)
     self.ui.SetButton3.connect('clicked(bool)', self.onSetButton3)
-    
-    #self.ui.resetTask.connect('clicked(bool)',self.onResetTask)
-
 
     # Add vertical spacer
     self.layout.addStretch(1)
@@ -917,7 +638,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
           self.ui.portSelectorComboBox.setEnabled(False)
           self.ui.baudSelectorComboBox.setEnabled(False)
           self.ui.detectDevice.setEnabled(False)
-          #self.ui.sendButton.setEnabled(True)
           self.ui.samplesPerSecondText.setEnabled(False)
 
         else:
@@ -955,22 +675,14 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
         for device in devices:
             self.ui.portSelectorComboBox.addItem(device)
             
-    
-    
+       
   def onSetButton1(self, clicked): 
 
     # Alert
     if(((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
         
         self.deviceError("Operation Not Valid.", "Changer Views are duplicate. You must choise only one 'Changer'.", "critical")
-        
-        
-    # Warning Error
-    #if((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
-    
-     #   self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
-        
-        
+               
     elif(self.ui.button1_Choice.currentText=="Change Viewer"):
  
         ArduinoPedalBoardViewsButtonRight()
@@ -982,27 +694,24 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
         #Change Text in combobox
         self.ui.button2_Choice.setCurrentText("Slice Offset +")
         self.ui.button3_Choice.setCurrentText("Slice Offset -")
-    
         
+    # Warning Error    
+    elif((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
+    
+        self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
+          
+          
     #
     # Method Button2
     #
  
-
   def onSetButton2(self, clicked):  
    
     # Critical Error
     if(((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button1_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
         
         self.deviceError("Operation Not Valid.", "Changer Views are duplicate. You must choise only one 'Changer'.", "critical")
-    
-    
-    # Warning Error
-    #if((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
-    
-        #self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
-        
-        
+               
     elif(self.ui.button2_Choice.currentText=="Change Viewer"):
  
         ArduinoPedalBoardViewsButtonCentral()
@@ -1013,13 +722,17 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
         #Change Text in combobox
         self.ui.button1_Choice.setCurrentText("Slice Offset +")
-        self.ui.button3_Choice.setCurrentText("Slice Offset -")
-          
-          
+        self.ui.button3_Choice.setCurrentText("Slice Offset -")       
+        
+    # Warning Error    
+    elif((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
+    
+        self.deviceError("Missed Option", "Changer Viewer not found!", "warning")  
+       
+       
     #
     # Method Button3
-    #
-  
+    #          
            
   def onSetButton3(self, clicked):
   
@@ -1027,14 +740,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     if(((self.ui.button3_Choice.currentText=="Change Viewer") and (self.ui.button1_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
         
         self.deviceError("Operation Not Valid.", "Changer Views are duplicate. You must choise only one 'Changer'.", "critical")
-      
-      
-    # Warning Error
-    #if((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
-    
-        #self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
-        
-        
+                
     elif(self.ui.button3_Choice.currentText=="Change Viewer"):
 
         ArduinoPedalBoardViews()
@@ -1045,20 +751,12 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
         #Change Text in combobox
         self.ui.button1_Choice.setCurrentText("Slice Offset +")
-        self.ui.button2_Choice.setCurrentText("Slice Offset -")
+        self.ui.button2_Choice.setCurrentText("Slice Offset -")           
+            
+    # Warning Error    
+    elif((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
     
-  '''  
-    #
-    # Method onResetTask
-    #
- 
-  def onResetTask(self,clicked):
-  
-    self.ui.button1_Choice.setEnabled(True)
-    self.ui.button2_Choice.setEnabled(True)
-    self.ui.button3_Choice.setEnabled(True)
-  '''  
-    
+        self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
 
   def onSetIDEButton(self, clicked):
     dialog = qt.QFileDialog()
@@ -1078,8 +776,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.logic.sendMessage(message)
 
   def onMonitorButton(self, clicked):
-    monitor = ArduinoMonitor() #old code
-    #monitor = ArduinoPedalBoard() #*   questo funziona*
+    monitor = ArduinoMonitor()
 
   def onPlotterButton(self, clicked):
     if clicked and self.plotter is None:
