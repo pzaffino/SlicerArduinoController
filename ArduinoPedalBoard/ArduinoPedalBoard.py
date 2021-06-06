@@ -162,10 +162,21 @@ class ArduinoMonitor(ScriptedLoadableModule):
 class ArduinoPedalBoardViews(ScriptedLoadableModule):
 
 
-  def __init__(self):
-  
+  def __init__(self,parent):
+    ScriptedLoadableModule.__init__(self, parent)
+    self.parent.title = "ArduinoPedalBoard" # TODO make this more human readable by adding spaces
+    self.parent.categories = ["Developer Tools"]
+    self.parent.dependencies = []
+    self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Domenico Leuzzi (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy)", "Andras Lasso (PerkLab, Queen's)", "Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
+    self.parent.helpText = """
+    This module allows to connect and transmit/receive data from Arduino board. On top of this users can build applications.
+"""
+    self.parent.helpText += self.getDefaultModuleDocumentationLink()
+    self.parent.acknowledgementText = """ """ # replace with organization, grant and thanks.
+    
+    
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button3IsPushed)
+    #sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.button3IsPushed)  #QUESTO CI DEVE ESSERE VEDERE DOVE METTERLO
     
     # Get Slice Node from Scene
     self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
@@ -532,17 +543,17 @@ class ArduinoPedalBoardViewsButtonRight(ScriptedLoadableModule):
 
 
 #
-# ArduinoConnect
+# Class ArduinoPedalBoard
 #
 
-class ArduinoConnect(ScriptedLoadableModule):
+class ArduinoPedalBoard(ScriptedLoadableModule):
   """Uses ScriptedLoadableModule base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
 
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
-    self.parent.title = "Arduino Connect" # TODO make this more human readable by adding spaces
+    self.parent.title = "ArduinoPedalBoard" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Developer Tools"]
     self.parent.dependencies = []
     self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Domenico Leuzzi (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy)", "Andras Lasso (PerkLab, Queen's)", "Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
@@ -556,7 +567,7 @@ class ArduinoConnect(ScriptedLoadableModule):
 # ArduinoConnectWidget
 #
 
-class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
+class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
   """Uses ScriptedLoadableModuleWidget base class, available at:
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
@@ -568,14 +579,14 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     self.plotter = None
 
     # Configuration
-    self.configFileName = __file__.replace("ArduinoConnect.py", "Resources%sArduinoConnectConfig.json" % (os.sep))
+    self.configFileName = __file__.replace("ArduinoPedalBoard.py", "Resources%sArduinoPedalBoardConfig.json" % (os.sep))
     with open(self.configFileName) as f:
       self.config = json.load(f)
 
-    self.logic = ArduinoConnectLogic()
+    self.logic = ArduinoPedalBoardLogic()
 
     # Load widget from .ui file (created by Qt Designer)
-    uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
+    uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoPedalBoard.ui'))
     self.layout.addWidget(uiWidget)
     self.ui = slicer.util.childWidgetVariables(uiWidget)
 
@@ -811,7 +822,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 # ArduinoConnectLogic
 #
 
-class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
+class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
   """This class should implement all the actual
   computation done by your module.  The interface
   should be such that other python code can import
@@ -882,7 +893,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       return msg
 
 
-class ArduinoConnectTest(ScriptedLoadableModuleTest):
+class ArduinoPedalBoardTest(ScriptedLoadableModuleTest):
   """
   This is the test case for your scripted module.
   Uses ScriptedLoadableModuleTest base class, available at:
@@ -898,9 +909,9 @@ class ArduinoConnectTest(ScriptedLoadableModuleTest):
     """Run as few or as many tests as needed here.
     """
     self.setUp()
-    self.test_ArduinoConnect1()
+    self.test_ArduinoPedalBoard1()
 
-  def test_ArduinoConnect1(self):
+  def test_ArduinoPedalBoard11(self):
     """ Ideally you should have several levels of tests.  At the lowest level
     tests should exercise the functionality of the logic with different inputs
     (both valid and invalid).  At higher levels your tests should emulate the
@@ -925,6 +936,6 @@ class ArduinoConnectTest(ScriptedLoadableModuleTest):
     self.delayDisplay('Finished with download and loading')
 
     volumeNode = slicer.util.getNode(pattern="FA")
-    logic = ArduinoConnectLogic()
+    logic = ArduinoPedalBoardLogic()
     self.assertIsNotNone( logic.hasImageData(volumeNode) )
     self.delayDisplay('Test passed!')
