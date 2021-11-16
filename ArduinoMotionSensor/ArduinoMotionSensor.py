@@ -16,7 +16,7 @@ class ArduinoMotionSensor(ScriptedLoadableModule):
 
   def __init__(self, parent):
     ScriptedLoadableModule.__init__(self, parent)
-    self.parent.title = "Arduino ArduinoMotion Sensor" # TODO make this more human readable by adding spaces
+    self.parent.title = "Arduino Motion Sensor" # TODO make this more human readable by adding spaces
     self.parent.categories = ["Developer Tools"]
     self.parent.dependencies = []
     self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy)",  "Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
@@ -38,7 +38,8 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
 
-    self.logic = ArduinoMotionSensorLogic()
+    self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
+    self.logic = ArduinoMotionSensorLogic(self.ArduinoNode)
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoMotionSensor.ui'))
@@ -46,12 +47,56 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
     self.ui = slicer.util.childWidgetVariables(uiWidget)
     
     # connections
-    #self.ui.portSelectorComboBox.setEnabled(False)
+   
+    self.ui.startButton.connect('toggled(bool)', self.onStartButton)
+    # Default values for QLineEdit
+    self.ui.offsetText.setText("10")
+    
+   
+   
+  def onStartButton(self, toggle):
+        self.logic.offset =  float(self.ui.offsetText.text)
+       
+       
+        if toggle:
+               
+                    
+                        self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.Motion)
+                        self.ui.startButton.setText("Stop Motion")
+                        self.ui.startButton.setStyleSheet("background-color:#ff0000")
+                        self.ui.offsetText.setEnabled(False)
+                        
+                
+        
+        else:
+            print("stop")
+            self.ArduinoNode.RemoveAllObservers()
+            self.ui.startButton.setText("Start Motion")
+            self.ui.startButton.setStyleSheet("background-color:#f1f1f1;")
+            self.ui.offsetText.setEnabled(True)
+        
+        
+
+        
+       
+        
+       
+            
+           
+        
+        
+      
+   
+   
 
   def cleanup(self):
+  
     pass
 
-  #def onConnectButton(self, toggle):
+
+            
+
+    
 
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
@@ -77,12 +122,63 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
   https://github.com/Slicer/Slicer/blob/master/Base/Python/slicer/ScriptedLoadableModule.py
   """
 
-  def __init__(self):
-      ScriptedLoadableModuleLogic.__init__(self)
+  def __init__(self, arduinoNode):
+    ScriptedLoadableModuleLogic.__init__(self)
+    self.ArduinoNode = arduinoNode
+    #self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
+    #sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.Motion)
+    self.forward=0
+    self.left=0
+    self.right=0
+    
+    
+  def Motion(self, caller, event):
+    
+    message=self.ArduinoNode.GetParameter("Data").strip()
+    if(message=="Forward"):
+        print("Hai selezionato Assiale")
+        self.forward=1
+        self.left=0
+        self.right=0
+    if(message=="Left"):
+        print("Hai selezionato Sagittale")
+        self.left=1
+        self.forward=0
+        self.right=0
+    if(message=="Right"):
+        print("Hai selezionato Coronale")
+        self.right=1
+        self.left=0
+        self.forward=0
+    if(message=='Up'and self.forward>=1):
+        print(message)
+        self.RedLogic = slicer.app.layoutManager().sliceWidget('Red').sliceLogic()
+        self.RedLogic.SetSliceOffset(self.RedLogic.GetSliceOffset()+self.offset)
+        
+    if(message=='Down'and self.forward>=1):
+        print(message)
+        self.RedLogic = slicer.app.layoutManager().sliceWidget('Red').sliceLogic()
+        self.RedLogic.SetSliceOffset(self.RedLogic.GetSliceOffset()-self.offset)
+ 
+    if(message=="Up" and self.left>=1):
+        print(message)
+        self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
+        self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()+self.offset)
+    if(message=="Down" and self.left>=1):
+        print(message)
+        self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
+        self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()-self.offset)
+    if(message=="Up" and self.right>=1):
+        print(message)
+        self.GreenLogic = slicer.app.layoutManager().sliceWidget('Green').sliceLogic()
+        self.GreenLogic.SetSliceOffset(self.GreenLogic.GetSliceOffset()+self.offset)
+    if(message=="Down" and self.right>=1):
+        print(message)
+        self.GreenLogic = slicer.app.layoutManager().sliceWidget('Green').sliceLogic()
+        self.GreenLogic.SetSliceOffset(self.GreenLogic.GetSliceOffset()-self.offset)
+  
 
-  # HERE CODE ALREADY WRITTEN
-
-
+    
 class ArduinoMotionSensorTest(ScriptedLoadableModuleTest):
   """
   This is the test case for your scripted module.
