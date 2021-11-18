@@ -61,7 +61,7 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
         if toggle:
                
                     
-                        self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.Motion)
+                        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.Motion)
                         self.ui.startButton.setText("Stop Motion")
                         self.ui.startButton.setStyleSheet("background-color:#ff0000")
                         self.ui.offsetText.setEnabled(False)
@@ -70,7 +70,7 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
         
         else:
             print("stop")
-            self.ArduinoNode.RemoveAllObservers()
+            self.ArduinoNode.RemoveObserver(self.sceneModifiedObserverTag)
             self.ui.startButton.setText("Start Motion")
             self.ui.startButton.setStyleSheet("background-color:#f1f1f1;")
             self.ui.offsetText.setEnabled(True)
