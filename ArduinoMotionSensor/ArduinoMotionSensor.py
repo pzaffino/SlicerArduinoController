@@ -136,17 +136,17 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
     
     message=self.ArduinoNode.GetParameter("Data").strip()
     if(message=="Forward"):
-        print("Hai selezionato Assiale")
+        print("Red View Selected")
         self.forward=1
         self.left=0
         self.right=0
     if(message=="Left"):
-        print("Hai selezionato Sagittale")
+        print("Green View Selected")
         self.left=1
         self.forward=0
         self.right=0
     if(message=="Right"):
-        print("Hai selezionato Coronale")
+        print("Yellow View Selected")
         self.right=1
         self.left=0
         self.forward=0
@@ -162,20 +162,20 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
  
     if(message=="Up" and self.left>=1):
         print(message)
-        self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
-        self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()+self.offset)
-    if(message=="Down" and self.left>=1):
-        print(message)
-        self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
-        self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()-self.offset)
-    if(message=="Up" and self.right>=1):
-        print(message)
         self.GreenLogic = slicer.app.layoutManager().sliceWidget('Green').sliceLogic()
         self.GreenLogic.SetSliceOffset(self.GreenLogic.GetSliceOffset()+self.offset)
-    if(message=="Down" and self.right>=1):
+    if(message=="Down" and self.left>=1):
         print(message)
         self.GreenLogic = slicer.app.layoutManager().sliceWidget('Green').sliceLogic()
         self.GreenLogic.SetSliceOffset(self.GreenLogic.GetSliceOffset()-self.offset)
+    if(message=="Up" and self.right>=1):
+        print(message)
+        self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
+        self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()+self.offset)
+    if(message=="Down" and self.right>=1):
+        print(message)
+        self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
+        self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()-self.offset)
   
 
     
