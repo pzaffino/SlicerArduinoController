@@ -194,7 +194,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
   
     message=self.ArduinoNode.GetParameter("Data").strip()
     
-    if(message=="5"):     
+    if(message=="1"):     #before "5"
       
         # Counter Check Value Increase
         self.check_view+=1
@@ -222,7 +222,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
             self.check_view=0    #Reset Counter Check value 
             
             
-    if((message=="0") and self.check_view==1):   #Red Case
+    if((message=="2") and self.check_view==1):   #Red Case #before "0"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -232,7 +232,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
         
-    if((message=="0") and self.check_view==2):  #Yellow Case
+    if((message=="2") and self.check_view==2):  #Yellow Case #before "0"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -242,7 +242,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
         
-    if((message=="0") and self.check_view==3):  #Green Case
+    if((message=="2") and self.check_view==3):  #Green Case #before "0"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -253,7 +253,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
           
         
-    if((message=="20") and self.check_view==1): #N.B. Serial Value == 0 #Red Case
+    if((message=="3") and self.check_view==1): #Red Case #before "20"
         print("Button UP Pressed, [Operation num.]:",message)
         
         # Changing Slice Node Offset 
@@ -263,7 +263,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
         
         
-    if((message=="20") and self.check_view==2):  #Yellow Case
+    if((message=="3") and self.check_view==2):  #Yellow Case #before "20"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -274,7 +274,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
         
        
-    if((message=="20") and self.check_view==3):  #Green Case
+    if((message=="3") and self.check_view==3):  #Green Case #before "20"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -294,7 +294,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
     
     message=self.ArduinoNode.GetParameter("Data").strip()
     
-    if(message=="0"):     
+    if(message=="2"):     #before "0"
        
         # Counter Check Value Increase
         self.check_view+=1
@@ -322,7 +322,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
             self.check_view=0    #Reset Counter Check value 
  
         
-    if((message=="5") and self.check_view==1):   #Red Case
+    if((message=="1") and self.check_view==1):   #Red Case #before "5"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -332,7 +332,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
         
-    if((message=="5") and self.check_view==2):  #Yellow Case
+    if((message=="1") and self.check_view==2):  #Yellow Case #before "5"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -342,7 +342,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
         
-    if((message=="5") and self.check_view==3):  #Green Case
+    if((message=="1") and self.check_view==3):  #Green Case #before "5"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -353,7 +353,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
           
         
-    if((message=="20") and self.check_view==1): #N.B. Serial Value == 5 #Red Case
+    if((message=="3") and self.check_view==1): #Red Case #before "20"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -364,7 +364,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
         
     
-    if((message=="20") and self.check_view==2):  #Yellow Case
+    if((message=="3") and self.check_view==2):  #Yellow Case #before "20"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -374,7 +374,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
         
-    if((message=="20") and self.check_view==3):  #Green Case
+    if((message=="3") and self.check_view==3):  #Green Case #before "20"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -393,7 +393,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
   
     message=self.ArduinoNode.GetParameter("Data").strip()
     
-    if(message=="20"):
+    if(message=="3"): #before "20"
         
         # Counter Check Value Increase
         self.check_view+=1
@@ -420,7 +420,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
             self.check_view=0    #Reset Counter Check value 
  
         
-    if((message=="5") and self.check_view==1):   #Red Case
+    if((message=="1") and self.check_view==1):   #Red Case #before "5"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -431,7 +431,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
         
         
-    if((message=="5") and self.check_view==2):
+    if((message=="1") and self.check_view==2): #before "5"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -442,7 +442,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
         
         
-    if((message=="5") and self.check_view==3):  #Green Case
+    if((message=="1") and self.check_view==3):  #Green Case #before "5"
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -453,7 +453,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
           
         
-    if((message=="0") and self.check_view==1):
+    if((message=="2") and self.check_view==1): #before "0"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -464,7 +464,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
         
         
-    if((message=="0") and self.check_view==2):  #Yellow Case
+    if((message=="2") and self.check_view==2):  #Yellow Case #before "0"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -475,7 +475,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
         
         
-    if((message=="0") and self.check_view==3):  #Green Case
+    if((message=="2") and self.check_view==3):  #Green Case #before "0"
     
         print("Button UP Pressed, [Operation num.]:",message)
         
