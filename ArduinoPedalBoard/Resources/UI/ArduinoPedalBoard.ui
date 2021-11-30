@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
-    <height>192</height>
+    <width>243</width>
+    <height>208</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -20,7 +20,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Selector Task</string>
+      <string>PedalBoard Tasker</string>
      </property>
     </widget>
    </item>
@@ -37,7 +37,7 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QPushButton" name="SetButton1">
      <property name="text">
       <string>Button 1</string>
@@ -56,7 +56,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="3" column="1">
     <widget class="QComboBox" name="button1_Choice">
      <property name="editable">
       <bool>true</bool>
@@ -73,14 +73,14 @@
      </item>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QPushButton" name="SetButton2">
      <property name="text">
       <string>Button 2</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="4" column="1">
     <widget class="QComboBox" name="button2_Choice">
      <property name="editable">
       <bool>true</bool>
@@ -97,14 +97,14 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QPushButton" name="SetButton3">
      <property name="text">
       <string>Button 3</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="5" column="1">
     <widget class="QComboBox" name="button3_Choice">
      <property name="enabled">
       <bool>true</bool>
@@ -122,6 +122,16 @@
        <string>Change Viewer</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLineEdit" name="SetOffset">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Set Offset</string>
+     </property>
     </widget>
    </item>
   </layout>
