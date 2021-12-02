@@ -54,15 +54,11 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     self.ui.SetButton2.connect('clicked(bool)', self.onSetButton2)
     self.ui.SetButton3.connect('clicked(bool)', self.onSetButton3)
     
-    # Default values for SetOffset
+    # Default values for Offset
     self.ui.SetOffset.setText("0.5")
     
-    # Set Default value for Offset
-    self.logic.OnSetOffset =  float(self.ui.SetOffset.text)
-
     # Add vertical spacer
-    self.layout.addStretch(1)   
-    
+    self.layout.addStretch(1)
     
     
     #
@@ -70,6 +66,10 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     #  
   
   def onSetButton1(self, clicked): 
+  
+    # Get Offset from qtEditLine
+    self.logic.OnSetOffset =  float(self.ui.SetOffset.text)
+  
   
     # Alert
     if(((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
@@ -104,6 +104,9 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     #
  
   def onSetButton2(self, clicked):  
+  
+    # Get Offset from qtEditLine
+    self.logic.OnSetOffset =  float(self.ui.SetOffset.text)
    
     # Critical Error
     if(((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button1_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):
@@ -133,6 +136,9 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     #          
            
   def onSetButton3(self, clicked):
+  
+    # Get Offset from qtEditLine
+    self.logic.OnSetOffset =  float(self.ui.SetOffset.text)
   
     # Alert
     if(((self.ui.button3_Choice.currentText=="Change Viewer") and (self.ui.button1_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer")) or ((self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Change Viewer"))):

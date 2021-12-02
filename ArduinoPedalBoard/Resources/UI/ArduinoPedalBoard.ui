@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>243</width>
-    <height>208</height>
+    <height>190</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -36,6 +36,19 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <widget class="QLineEdit" name="SetOffset">
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="placeholderText">
+      <string>Set Offset</string>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QPushButton" name="SetButton1">
@@ -122,16 +135,6 @@
        <string>Change Viewer</string>
       </property>
      </item>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="QLineEdit" name="SetOffset">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>Set Offset</string>
-     </property>
     </widget>
    </item>
   </layout>
