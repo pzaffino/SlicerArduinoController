@@ -60,7 +60,7 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
        
         if toggle:
                
-                    
+                        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
                         self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.Motion)
                         self.ui.startButton.setText("Stop Motion")
                         self.ui.startButton.setStyleSheet("background-color:#ff0000")
@@ -70,6 +70,7 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
         
         else:
             print("stop")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
             self.ArduinoNode.RemoveObserver(self.sceneModifiedObserverTag)
             self.ui.startButton.setText("Start Motion")
             self.ui.startButton.setStyleSheet("background-color:#f1f1f1;")
@@ -107,19 +108,21 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
     
     
   def Motion(self, caller, event):
-    
     message=self.ArduinoNode.GetParameter("Data").strip()
     if(message=="Forward"):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
         print("Red View Selected")
         self.forward=1
         self.left=0
         self.right=0
     if(message=="Left"):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
         print("Green View Selected")
         self.left=1
         self.forward=0
         self.right=0
     if(message=="Right"):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
         print("Yellow View Selected")
         self.right=1
         self.left=0
@@ -128,12 +131,10 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
         print(message)
         self.RedLogic = slicer.app.layoutManager().sliceWidget('Red').sliceLogic()
         self.RedLogic.SetSliceOffset(self.RedLogic.GetSliceOffset()+self.offset)
-        
     if(message=='Down'and self.forward>=1):
         print(message)
         self.RedLogic = slicer.app.layoutManager().sliceWidget('Red').sliceLogic()
         self.RedLogic.SetSliceOffset(self.RedLogic.GetSliceOffset()-self.offset)
- 
     if(message=="Up" and self.left>=1):
         print(message)
         self.GreenLogic = slicer.app.layoutManager().sliceWidget('Green').sliceLogic()
@@ -150,6 +151,15 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
         print(message)
         self.YellowLogic = slicer.app.layoutManager().sliceWidget('Yellow').sliceLogic()
         self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()-self.offset)
+    if(message=="Backward" and self.forward>=1):
+        print(message)
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
+    if(message=="Backward" and self.left>=1):
+        print(message)
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+    if(message=="Backward" and self.right>=1):
+        print(message)
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
   
 
     
