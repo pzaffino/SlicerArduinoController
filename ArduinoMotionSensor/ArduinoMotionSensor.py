@@ -75,38 +75,12 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
             self.ui.startButton.setStyleSheet("background-color:#f1f1f1;")
             self.ui.offsetText.setEnabled(True)
         
-        
-
-        
-       
-        
-       
-            
-           
-        
-        
-      
-   
-   
 
   def cleanup(self):
   
     pass
 
 
-            
-
-    
-
-  def deviceError(self, title, message, error_type="warning"):
-    deviceMBox = qt.QMessageBox()
-    if error_type == "warning":
-      deviceMBox.setIcon(qt.QMessageBox().Warning)
-    elif error_type == "critical":
-      deviceMBox.setIcon(qt.QMessageBox().Critical)
-    deviceMBox.setWindowTitle(title)
-    deviceMBox.setText(message)
-    deviceMBox.exec()
 
 #
 # ArduinoMotionSensorLogic
