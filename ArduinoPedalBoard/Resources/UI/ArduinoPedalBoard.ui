@@ -84,6 +84,16 @@
        <string>Change Viewer</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset -</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="4" column="0">
@@ -106,6 +116,16 @@
      <item>
       <property name="text">
        <string>Change Viewer</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset -</string>
       </property>
      </item>
     </widget>
@@ -133,6 +153,16 @@
      <item>
       <property name="text">
        <string>Change Viewer</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset +</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Slice Offset -</string>
       </property>
      </item>
     </widget>
