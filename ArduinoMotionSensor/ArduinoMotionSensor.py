@@ -100,8 +100,6 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
   def __init__(self, arduinoNode):
     ScriptedLoadableModuleLogic.__init__(self)
     self.ArduinoNode = arduinoNode
-    #self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
-    #sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.Motion)
     self.forward=0
     self.left=0
     self.right=0
