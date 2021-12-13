@@ -50,9 +50,9 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     self.ui = slicer.util.childWidgetVariables(uiWidget)
     
     #Buttons
-    self.ui.SetButton1.connect('clicked(bool)', self.onSetButton1) 
-    self.ui.SetButton2.connect('clicked(bool)', self.onSetButton2)
-    self.ui.SetButton3.connect('clicked(bool)', self.onSetButton3)
+    self.ui.SetButton1.connect('clicked(bool)', self.onWidgetButton1) 
+    self.ui.SetButton2.connect('clicked(bool)', self.onWidgetButton2) 
+    self.ui.SetButton3.connect('clicked(bool)', self.onWidgetButton3) 
     
     # Default values for Offset
     self.ui.SetOffset.setText("0.5")
@@ -62,12 +62,12 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     
     
     #
-    # Method Button1
+    # Method Widget Button1
     #  
   
-  def onSetButton1(self, clicked): 
+  def onWidgetButton1(self, clicked): 
       
-    global s #Check case Button2 + e Button3 - (initial default value=0)
+    global s #Check case Button2 + e Button3 - (initial default value=0) ##Eliminare "global"
     s="0"
     
     global s1 #Check case Button2 - e Button3 + (initial default value=0)
@@ -95,23 +95,18 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     
     elif(((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Slice Offset +") and (self.ui.button3_Choice.currentText=="Slice Offset +"))):
         
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
+        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "warning")
         
     
     elif((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Slice Offset -") and (self.ui.button3_Choice.currentText=="Slice Offset -")):    
             
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
-
-
-    elif((self.ui.button1_Choice.currentText=="Change Viewer") and (self.ui.button2_Choice.currentText=="Slice Offset +") and (self.ui.button3_Choice.currentText=="Slice Offset +")):    
-            
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
+        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "warning")
   
         
     # Warning Error    
     elif((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
     
-        self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
+        self.deviceError("Missed Option", "Changer Viewer not found! Setting not valid.", "warning")
                 
     #           
     #Case: Button2 + Button3 -
@@ -165,15 +160,15 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
 
           
     #
-    # Method Button2
+    # Method Widget Button2
     #
  
-  def onSetButton2(self, clicked):  
+  def onWidgetButton2(self, clicked):  
   
-    global s2 #Check case Button1 + e Button3 - (initial default value=0)
+    global s2 #Check case Button1 + e Button3 - (*default value=0*)
     s2="0"
     
-    global s3 #Check case Button1 - e Button3 + (initial default value=0)
+    global s3 #Check case Button1 - e Button3 + (*default value=0*)
     s3="0"
       
     # Check text EditLine
@@ -204,18 +199,14 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     elif((self.ui.button1_Choice.currentText=="Slice Offset -") and (self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Slice Offset -")):    
             
         self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
-
-
-    elif((self.ui.button1_Choice.currentText=="Slice Offset +") and (self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Slice Offset +")):    
-            
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
   
         
     # Warning Error    
     elif((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
     
-        self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
-                
+        self.deviceError("Missed Option", "Changer Viewer not found! Setting not valid.", "warning")
+               
+               
     #           
     #Case: Button1 + Button3 -
     #
@@ -268,16 +259,16 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
 
     #
-    # Method Button3
+    # Method Widget Button3
     #          
            
-  def onSetButton3(self, clicked):
+  def onWidgetButton3(self, clicked):
   
   
-    global s4 #Check case Button1 + e Button2 - (initial default value=0)
+    global s4 #Check case Button1 + e Button2 - (*default value=0*)
     s4="0"
     
-    global s5 #Check case Button1 - e Button2 + (initial default value=0)
+    global s5 #Check case Button1 - e Button2 + (*default value=0*)
     s5="0"
       
     # Check text EditLine
@@ -302,24 +293,20 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     
     elif(((self.ui.button1_Choice.currentText=="Slice Offset +") and (self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Slice Offset +"))):
         
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
+        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "warning")
         
     
     elif((self.ui.button1_Choice.currentText=="Slice Offset -") and (self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Slice Offset -")):    
             
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
-
-
-    elif((self.ui.button1_Choice.currentText=="Slice Offset +") and (self.ui.button2_Choice.currentText=="Change Viewer") and (self.ui.button3_Choice.currentText=="Slice Offset +")):    
-            
-        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "critical")
+        self.deviceError("Operation Not Valid.", "Offset are duplicate. You must choise only one type offset.", "warning")
   
         
     # Warning Error    
     elif((self.ui.button1_Choice.currentText=="Select Option") or (self.ui.button2_Choice.currentText=="Select Option") or (self.ui.button3_Choice.currentText=="Select Option")):
     
         self.deviceError("Missed Option", "Changer Viewer not found!", "warning")
-                
+        
+        
     #           
     #Case: Button1 + Button2 -
     #
@@ -345,6 +332,7 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         #Case Button1 + e Button3 -
         s4=self.check_option="1"
         
+        
     #    
     #Case: Button1 - Button3 +
     #
@@ -365,7 +353,7 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton3.setEnabled(False)
         
         #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton3)
+        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton3) ### Fare metodi separati per eliminare il "global"
         
         #Check case Button1 - e Button3 +        
         s5=self.check_option="2"
@@ -389,6 +377,7 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
 #
 # ArduinoConnectLogic
 #
+
 
 class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
   """This class should implement all the actual
@@ -927,6 +916,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
                 
         # Print Slice Node Offset
         print("Offset Green Slice:",self.green_Slice.GetSliceOffset())  
+
 
   
 class ArduinoPedalBoardTest(ScriptedLoadableModuleTest):
