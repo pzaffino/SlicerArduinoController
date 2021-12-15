@@ -21,30 +21,51 @@ Extension for 3D slicer that allows to control the offset of the slice views thr
 an inexpensive motion sensor compatible with Arduino.
 
 ## Developers
+
 Paolo Zaffino (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
+
 Maria Francesca Spadea (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
-Students
+
+### Students
+
 Virgilio Sabatino (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
 
 ## Getting Started
+
 •	Connect PAJ7620 to “Arduino”. To do this simply connect:
-o	Vin to 3.3 V;
-o	Gnd to Gnd;
-o	SCL to SCL; 
-o	SDA to SDA.
-•	Connect “Arduino” to the USB port of pc and and run “paj7620_9gestures” code on “arduino IDE”. The code can be found here: “https://github.com/Seeed-Studio/Gesture_PAJ7620”.
+
+       o	Vin to 3.3 V;
+  
+       o	Gnd to Gnd;
+  
+       o	SCL to SCL; 
+  
+       o	SDA to SDA.
+  
+•	Connect “Arduino” to the USB port of pc and and run “paj7620_9gestures” code on “arduino IDE”. 
+
+       o The code can be found here: “https://github.com/Seeed-Studio/Gesture_PAJ7620”.
+  
 •	Connect “Arduino” to “3D Slicer” using “Slicer Arduino Controller” extension.
+
 •	On “ArduinoMotionSensor” extension in “3D Slicer”, choose the desidered offset variation and press “Start Motion” button.
 
 ## Motion Control Guide
+
 “Left” = Select Previous View
+
 “Right” = Select Next View
+
 “Up” = Increase Offset
+
 “Down” = Decrease Offset
+
 “Forward” = Full Screen of the Selected View 
+
 “Backward” = Disable Full screen
 
-Reference List
+## Reference List
+
 "Module Icon made by Freepik from www.flaticon.com"
 
 
