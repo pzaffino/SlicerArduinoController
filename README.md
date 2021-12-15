@@ -15,18 +15,18 @@ Bioengineering. 2020 Sep;7(3):109.
 ![screenshot](https://raw.githubusercontent.com/pzaffino/SlicerArduinoController/master/ArduinoController_screenshot.png)
 
 
-#ArduinoMotionSensor
+# ArduinoMotionSensor
 
 Extension for 3D slicer that allows to control the offset of the slice views through gestures using
 an inexpensive motion sensor compatible with Arduino.
 
-Developers
+## Developers
 Paolo Zaffino (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
 Maria Francesca Spadea (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
 Students
 Virgilio Sabatino (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
 
-Getting Started
+## Getting Started
 •	Connect PAJ7620 to “Arduino”. To do this simply connect:
 o	Vin to 3.3 V;
 o	Gnd to Gnd;
@@ -36,7 +36,7 @@ o	SDA to SDA.
 •	Connect “Arduino” to “3D Slicer” using “Slicer Arduino Controller” extension.
 •	On “ArduinoMotionSensor” extension in “3D Slicer”, choose the desidered offset variation and press “Start Motion” button.
 
-Motion Control Guide
+## Motion Control Guide
 “Left” = Select Previous View
 “Right” = Select Next View
 “Up” = Increase Offset
