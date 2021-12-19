@@ -17,7 +17,7 @@ Bioengineering. 2020 Sep;7(3):109.
 
 # ArduinoMotionSensor
 
-Extension for 3D slicer that allows to control the offset of the slice views through gestures using
+Extension for 3D slicer that allows to control the Slice View through gestures using
 an inexpensive motion sensor compatible with Arduino.
 
 ## Developers
@@ -60,9 +60,9 @@ Virgilio Sabatino (Universita’ degli Studi “Magna Græcia” di Catanzaro, I
 
 “Down” = Decrease Offset
 
-“Forward” = Full Screen of the Selected View 
+“Forward” = Enable Full Screen
 
-“Backward” = Disable Full screen
+“Backward” = Disable Full Screen
 
 ## Reference List
 
