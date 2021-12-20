@@ -61,7 +61,6 @@ class ArduinoMotionSensorWidget(ScriptedLoadableModuleWidget):
         self.ui.startButton.setStyleSheet("background-color:#ff0000")
         self.ui.offsetText.setEnabled(False)
     else:
-        print("stop")
         slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
         self.ArduinoNode.RemoveObserver(self.sceneModifiedObserverTag)
         self.ui.startButton.setText("Start Motion")
