@@ -1,7 +1,7 @@
 # SlicerArduinoController
 
 Extension that allows interfacing 3D Slicer with Arudino.
-The main module is ArduinoConnect, but several side extension were developed for specific tasks.
+The main module is ArduinoConnect, but several side extensions were developed for specific tasks.
 
 ## Developers
 
