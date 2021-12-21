@@ -92,6 +92,7 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
     ScriptedLoadableModuleLogic.__init__(self)
     self.ArduinoNode = arduinoNode
     self.selected_view=0
+    self.FullScreen=None
   def Motion(self, caller, event):
     message=self.ArduinoNode.GetParameter("Data").strip()
     if(message=="Left"):
@@ -124,12 +125,34 @@ class ArduinoMotionSensorLogic(ScriptedLoadableModuleLogic):
         self.YellowLogic.SetSliceOffset(self.YellowLogic.GetSliceOffset()-self.offset)
     if(message=="Forward" and self.selected_view==0):
         slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-    if(message=="Forward" and self.selected_view==1):      
+        self.FullScreen='Red'
+    if(message=="Forward" and self.selected_view==1):     
         slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+        self.FullScreen='Green'
     if(message=="Forward" and self.selected_view==2):
         slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
+        self.FullScreen='Yellow'  
+    if(message=="Right" and self.FullScreen=='Red'):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+        self.selected_view=1
+        self.FullScreen='Green'
+    elif(message=="Right" and self.FullScreen=='Green'):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
+        self.selected_view=2
+        self.FullScreen='Yellow'
+    if(message=="Left" and self.FullScreen=='Green'):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
+        self.selected_view=0
+        self.FullScreen='Red'
+    elif(message=="Left" and self.FullScreen=='Yellow'):
+        slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+        self.selected_view=1
+        self.FullScreen='Green'
     if(message=="Backward"):
         slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
+        self.FullScreen=None
+            
+   
         
 
     
