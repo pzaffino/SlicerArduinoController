@@ -455,6 +455,17 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
   
     # Read Serial Value
     message=self.ArduinoNode.GetParameter("Data").strip()
+    
+    debug_mode = True
+    if debug_mode:
+        print("DEBUG - BEGIN -")
+        print("message: ", message)
+        print("button 1: ", self.button1)
+        print("button 2: ", self.button2)
+        print("button 3: ", self.button3)
+        print("offest: ", self.OnSetOffset)
+        print("selected view: ", self.selected_view)
+        print("DEBUG - END -")
 
     #
     # Master Button1 Configuration + -
