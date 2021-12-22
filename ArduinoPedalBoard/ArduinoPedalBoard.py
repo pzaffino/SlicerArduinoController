@@ -60,27 +60,25 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     # Add vertical spacer
     self.layout.addStretch(1)
     
+    # Link to logic class
+    self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.ApplyChange)  
+    
     
     #
     # Method Widget Button1
     #  
   
   def onWidgetButton1(self, clicked): 
-      
-      
-    # Check text EditLine
+          
+    # Check Offset value on EditLine 
     if self.ui.SetOffset.text!="":  
         self.logic.OnSetOffset =  float(self.ui.SetOffset.text)
     
     else:
         self.deviceError("Missed Option", "Missed Offset Input value", "warning")
     
-        self.ui.button1_Choice.setEnabled(True)
-        self.ui.button2_Choice.setEnabled(True)
-        self.ui.button3_Choice.setEnabled(True)
-  
     #
-    # Alert
+    # Alert for Users (Missed Settings or duplicated)
     #
     
     if self.ui.button1_Choice.currentText=="Change Viewer" and self.ui.button2_Choice.currentText=="Change Viewer" or self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Change Viewer" or self.ui.button1_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Change Viewer":
@@ -127,10 +125,9 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     
         self.deviceError("Missed Option", "Changer Viewer not selected correctly! Please press the correct button.", "critical")
 
-
                 
     #           
-    #Case: Button2 + Button3 -
+    #Case: Button2 + Button3
     #
     
     elif self.ui.button1_Choice.currentText=="Change Viewer" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Slice Offset +" and self.ui.button3_Choice.currentText=="Slice Offset -":
@@ -148,22 +145,22 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton2.setEnabled(False)
         self.ui.SetButton3.setEnabled(False)
         
-        #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton1FirstCase)           
+        # Initialization Buttons
+        self.logic.button1="Change Viewer"
+        self.logic.button2="Slice Offset +"
+        self.logic.button3="Slice Offset -"
         
-        
-        
-    #    
+    #   
     #Case: Button2 - Button3 +
     #
     
     elif self.ui.button1_Choice.currentText=="Change Viewer" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Slice Offset -" and self.ui.button3_Choice.currentText=="Slice Offset +":
- 
+            
         #Change ComboBox Status
         self.ui.button1_Choice.setEnabled(False)
         self.ui.button2_Choice.setEnabled(False)
         self.ui.button3_Choice.setEnabled(False)
-        
+
         #Change Offset Status
         self.ui.SetOffset.setEnabled(False) 
         
@@ -172,28 +169,25 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton2.setEnabled(False)
         self.ui.SetButton3.setEnabled(False)
         
-        #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton1SecondCase)
-        
-          
+        # Initialization Buttons
+        self.logic.button1="Change Viewer"
+        self.logic.button2="Slice Offset -"
+        self.logic.button3="Slice Offset +"
+    
+      
     #
     # Method Widget Button2
     #
  
   def onWidgetButton2(self, clicked):  
-  
-      
+    
     # Check text EditLine
     if self.ui.SetOffset.text!="":  
         self.logic.OnSetOffset =  float(self.ui.SetOffset.text)
     
     else:
         self.deviceError("Missed Option", "Missed Offset Input value", "warning")
-    
-        self.ui.button1_Choice.setEnabled(True)
-        self.ui.button2_Choice.setEnabled(True)
-        self.ui.button3_Choice.setEnabled(True)
-  
+      
     #
     # Alert
     #
@@ -242,13 +236,12 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     
         self.deviceError("Missed Option", "Changer Viewer not selected correctly! Please press the correct button.", "critical")
 
-
                              
     #           
     #Case: Button1 + Button3 -
     # 
     
-    elif self.ui.button1_Choice.currentText=="Slice Offset +" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset -":
+    elif self.ui.button1_Choice.currentText=="Slice Offset +" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset -" or self.ui.button1_Choice.currentText=="Slice Offset -" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset +":
  
         #Change ComboBox Status
         self.ui.button1_Choice.setEnabled(False)
@@ -263,22 +256,23 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton2.setEnabled(False)
         self.ui.SetButton3.setEnabled(False)
         
-        #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton2FirstCase)           
-        
-        
-        
-    #    
+        # Initialization Buttons
+        self.logic.button1="Slice Offset +"
+        self.logic.button2="Change Viewer"
+        self.logic.button3="Slice Offset -"
+    
+    
+    #           
     #Case: Button1 - Button3 +
-    #   
+    #  
     
     elif self.ui.button1_Choice.currentText=="Slice Offset -" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset +":
- 
+    
         #Change ComboBox Status
         self.ui.button1_Choice.setEnabled(False)
         self.ui.button2_Choice.setEnabled(False)
         self.ui.button3_Choice.setEnabled(False)
-        
+
         #Change Offset Status
         self.ui.SetOffset.setEnabled(False) 
         
@@ -287,10 +281,12 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton2.setEnabled(False)
         self.ui.SetButton3.setEnabled(False)
         
-        #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton2SecondCase)
-        
-
+        # Initialization Buttons
+        self.logic.button1="Slice Offset -"
+        self.logic.button2="Change Viewer"
+        self.logic.button3="Slice Offset +"
+      
+                
     #
     # Method Widget Button3
     #          
@@ -305,10 +301,6 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     
     else:
         self.deviceError("Missed Option", "Missed Offset Input value", "warning")
-    
-        self.ui.button1_Choice.setEnabled(True)
-        self.ui.button2_Choice.setEnabled(True)
-        self.ui.button3_Choice.setEnabled(True)
   
     #
     # Alert
@@ -357,11 +349,10 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
     elif self.ui.button1_Choice.currentText=="Slice Offset -" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset -" or self.ui.button1_Choice.currentText=="Slice Offset -" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset +" or self.ui.button1_Choice.currentText=="Slice Offset +" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset -" or self.ui.button1_Choice.currentText=="Slice Offset +" and self.ui.button2_Choice.currentText=="Change Viewer" and self.ui.button3_Choice.currentText=="Slice Offset +":
     
         self.deviceError("Missed Option", "Changer Viewer not selected correctly! Please press the correct button.", "critical")
-      
-      
+          
            
     #           
-    #Case: Button1 + Button2 -
+    #Case: Button1 + Button2 - 
     #
     
     elif self.ui.button1_Choice.currentText=="Slice Offset +" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Slice Offset -" and self.ui.button3_Choice.currentText=="Change Viewer":
@@ -379,22 +370,23 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton2.setEnabled(False)
         self.ui.SetButton3.setEnabled(False)
         
-        #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton3FirstCase)           
+        # Initialization Buttons
+        self.logic.button1="Slice Offset +"
+        self.logic.button2="Slice Offset -"
+        self.logic.button3="Change Viewer"
         
-        
-        
-    #    
-    #Case: Button1 - Button3 +
+    
+    #
+    #Case Button1 - Button2 +
     #
     
     elif self.ui.button1_Choice.currentText=="Slice Offset -" and self.ui.SetOffset.text!="" and self.ui.button2_Choice.currentText=="Slice Offset +" and self.ui.button3_Choice.currentText=="Change Viewer":
- 
+    
         #Change ComboBox Status
         self.ui.button1_Choice.setEnabled(False)
         self.ui.button2_Choice.setEnabled(False)
         self.ui.button3_Choice.setEnabled(False)
-        
+
         #Change Offset Status
         self.ui.SetOffset.setEnabled(False) 
         
@@ -403,9 +395,12 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         self.ui.SetButton2.setEnabled(False)
         self.ui.SetButton3.setEnabled(False)
         
-        #Link to logic class
-        self.sceneModifiedObserverTag=self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.logic.OnSetButton3SecondCase)
-    
+        # Initialization Buttons
+        self.logic.button1="Slice Offset -"
+        self.logic.button2="Slice Offset +"
+        self.logic.button3="Change Viewer"
+ 
+        
     
   def deviceError(self, title, message, error_type="warning"):
     deviceMBox = qt.QMessageBox()
@@ -421,10 +416,12 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
   def cleanup(self):
     pass
     
+    
 
 #
 # ArduinoConnectLogic
 #
+
 
 
 class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
@@ -439,572 +436,127 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
 
   def __init__(self, arduinoNode):
       ScriptedLoadableModuleLogic.__init__(self)
-
       self.ArduinoNode = arduinoNode
 
       self.parameterNode=slicer.vtkMRMLScriptedModuleNode()
       self.parameterNode.SetName("arduinoNode")
       slicer.mrmlScene.AddNode(self.parameterNode)
       
-      #Counter Check Value for change views
-      self.check_view=0 
-        
-        
-    #    
-    # Case Button2 + Button3 -
-    #   
-    
+      #Layout Selected (example: Red, Yellow, Green or Complete)
+      self.selected_view=0 
       
-  def OnSetButton1FirstCase(self, caller, event):
+      # Buttons Change Viewer Config
+      self.button1=None
+      self.button2=None
+      self.button3=None
+                      
+      
+  def ApplyChange(self, caller, event):
   
+    # Read Serial Value
     message=self.ArduinoNode.GetParameter("Data").strip()
-    
-    if message=="1":     
-      
-        # Counter Check Value Increase
-        self.check_view+=1
-        
-        if self.check_view==1:   
-            # Set Slice Node from Scene (Red)
-            
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-            
-        if self.check_view==2:
-            # Set Slice Node from Scene (Yellow)
-            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
-            
-        if self.check_view==3:
-            # Set Slice Node from Scene (Green)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
-            
-        if self.check_view==4:
-            # Default LayoutUpView
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
-            
-            self.check_view=0    #Reset Counter Check value 
-          
-                
-            
-    if message=="2" and self.check_view==1:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
-        
-    if message=="2" and self.check_view==2:
 
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)   
-        
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
-        
-        
-    if message=="2" and self.check_view==3:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)
-        
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
-          
-          
-    if message=="3" and self.check_view==1: 
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
-        
-        
-    if message=="3" and self.check_view==2:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
-        
-       
-    if message=="3" and self.check_view==3:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
-
-
-    #    
-    # Case Button2 - Button3 +
     #
-  
-  
-  def OnSetButton1SecondCase(self, caller, event):
-  
-    message=self.ArduinoNode.GetParameter("Data").strip()
-    
-    if message=="1":     
-      
-        # Counter Check Value Increase
-        self.check_view+=1
-        
-        if self.check_view==1:   
-            # Set Slice Node from Scene (Red)
-            
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-            
-        if self.check_view==2:
-            # Set Slice Node from Scene (Yellow)
-            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
-            
-        if self.check_view==3:
-            # Set Slice Node from Scene (Green)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
-            
-        if self.check_view==4:
-            # Default LayoutUpView
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
-            
-            self.check_view=0    #Reset Counter Check value 
-          
-          
-    
-    if message=="2" and self.check_view==1:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
-        
-    if message=="2" and self.check_view==2:
-
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)   
-        
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
-        
-    if message=="2" and self.check_view==3:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)
-        
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
-          
-          
-    if message=="3" and self.check_view==1: 
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
-        
-        
-    if message=="3" and self.check_view==2:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
-        
-       
-    if message=="3" and self.check_view==3:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())  
-    
-
-  #
-  # OnSetButton2 Method  (Case Button1 + Button3 -)
-  #
-
-  
-  def OnSetButton2FirstCase(self, caller, event):    
-    
-    message=self.ArduinoNode.GetParameter("Data").strip()
-    
-    if message=="2":     
-       
-        # Counter Check Value Increase
-        self.check_view+=1
-        
-        if self.check_view==1:   
-            # Set Slice Node from Scene (Red)
-            
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-       
-        if self.check_view==2:
-            # Set Slice Node from Scene (Yellow)
-            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
-            
-        if self.check_view==3:
-            # Set Slice Node from Scene (Green)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
-            
-        if self.check_view==4:
-            # Default LayoutUpView
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
-            
-            self.check_view=0    #Reset Counter Check value 
-            
-         
-            
-    if message=="1" and self.check_view==1:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
-        
-    if message=="1" and self.check_view==2:
-
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)   
-        
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
-        
-        
-    if message=="1" and self.check_view==3:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)
-        
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
-          
-          
-    if message=="3" and self.check_view==1: 
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
-        
-        
-    if message=="3" and self.check_view==2:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
-        
-       
-    if message=="3" and self.check_view==3:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
-
-
-    #    
-    # Case Button1 - Button3 +
-    # 
-
-
-  def OnSetButton2SecondCase(self, caller, event):    
-    
-    message=self.ArduinoNode.GetParameter("Data").strip()
-    
-    if message=="2":     
-       
-        # Counter Check Value Increase
-        self.check_view+=1
-        
-        if self.check_view==1:   
-            # Set Slice Node from Scene (Red)
-            
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-       
-        if self.check_view==2:
-            # Set Slice Node from Scene (Yellow)
-            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
-            
-        if self.check_view==3:
-            # Set Slice Node from Scene (Green)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
-            
-        if self.check_view==4:
-            # Default LayoutUpView
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
-            
-            self.check_view=0    #Reset Counter Check value 
-            
-            
-    
-    if message=="1" and self.check_view==1:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
-        
-    if message=="1" and self.check_view==2:
-
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)   
-        
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
-        
-    if message=="1" and self.check_view==3:
-
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)
-        
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
-          
-          
-    if message=="3" and self.check_view==1: 
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
-        
-        
-    if message=="3" and self.check_view==2:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
-        
-       
-    if message=="3" and self.check_view==3:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())  
-    
-
-  #
-  # OnSetButton3 Method  
-  #
-  
-
-  def OnSetButton3FirstCase(self, caller, event):
-  
-    message=self.ArduinoNode.GetParameter("Data").strip()
-    
-    if message=="3":     
-       
-        # Counter Check Value Increase
-        self.check_view+=1
-        
-        if self.check_view==1:   
-            # Set Slice Node from Scene (Red)
-            
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-       
-        if self.check_view==2:
-            # Set Slice Node from Scene (Yellow)
-            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
-            
-        if self.check_view==3:
-            # Set Slice Node from Scene (Green)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
-            
-        if self.check_view==4:
-            # Default LayoutUpView
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
-            
-            self.check_view=0    #Reset Counter Check value 
-         
-         
-    #    
-    # Case Button1 + Button2 -
-    #          
-            
-            
-    if message=="1" and self.check_view==1:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
-        
-    if message=="1" and self.check_view==2:
-
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)   
-        
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
-        
-        
-    if message=="1" and self.check_view==3:
-    
-        print("Button DOWN Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)
-        
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
-          
-          
-    if message=="2" and self.check_view==1: 
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
-        
-        
-    if message=="2" and self.check_view==2:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
-        
-       
-    if message=="2" and self.check_view==3:  
-    
-        print("Button UP Pressed, [Operation num.]:",message)
-        
-        # Changing Slice Node Offset 
-        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)    
-                
-        # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
-
-    
-    #    
-    # Case Button1 + Button2 -
-    #  
-  
-  
-  def OnSetButton3SecondCase(self, caller, event):
-  
-    message=self.ArduinoNode.GetParameter("Data").strip()
-    
-    if message=="3":     
-       
-        # Counter Check Value Increase
-        self.check_view+=1
-        
-        if self.check_view==1:   
-            # Set Slice Node from Scene (Red)
-            
-            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
-       
-        if self.check_view==2:
-            # Set Slice Node from Scene (Yellow)
-            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
-            
-        if self.check_view==3:
-            # Set Slice Node from Scene (Green)
-            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
-            
-        if self.check_view==4:
-            # Default LayoutUpView
-            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
-            
-            self.check_view=0    #Reset Counter Check value 
-         
-         
-    #    
-    # Case Button1 - Button2 +
+    # Master Button1 Configuration + -
     #
     
-    if message=="1" and self.check_view==1:
+    if message=="1" and self.button1=="Change Viewer":     
+      
+        # Counter Check Value Increase
+        self.selected_view+=1 # Master Button 1 have "Change Viewer" value
+        
+        if self.selected_view==1:   
+            # Set Slice Node from Scene (Red)     
+            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
+            
+        if self.selected_view==2:
+            # Set Slice Node from Scene (Yellow)
+            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
+            
+        if self.selected_view==3:
+            # Set Slice Node from Scene (Green)
+            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+            
+        if self.selected_view==4:
+            # Default LayoutUpView
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
+            
+            self.selected_view=0    #Reset Counter Check value 
+          
+                
+            
+    if message=="2" and self.button2=="Slice Offset +" and self.selected_view==1 and self.button1=="Change Viewer":
+    
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
+        
+        
+    if message=="2" and self.button2=="Slice Offset +" and self.selected_view==2 and self.button1=="Change Viewer":
+
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)   
+        
+        # Print Slice Node Offset
+        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
+        
+        
+    if message=="2" and self.button2=="Slice Offset +" and self.selected_view==3 and self.button1=="Change Viewer":
+    
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)
+        
+        # Print Slice Node Offset
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
+          
+          
+    if message=="3" and self.button3=="Slice Offset -" and self.selected_view==1 and self.button1=="Change Viewer":
+        print("Button DOWN Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
+        
+        
+    if message=="3" and self.button3=="Slice Offset -" and self.selected_view==2 and self.button1=="Change Viewer": 
+    
+        print("Button DOWN Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
+        
+       
+    if message=="3" and self.button3=="Slice Offset -" and self.selected_view==3 and self.button1=="Change Viewer": 
+    
+        print("Button DOWN Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
+        
+    #
+    #Master Button1 (Configuration - +)
+    #
+    
+    if message=="2" and self.button2=="Slice Offset -" and self.selected_view==1 and self.button1=="Change Viewer":
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -1014,7 +566,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset())            
         
-    if message=="1" and self.check_view==2:
+    if message=="2" and self.button2=="Slice Offset -" and self.selected_view==2 and self.button1=="Change Viewer":
 
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -1024,8 +576,8 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         # Print Slice Node Offset
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
         
-    if message=="1" and self.check_view==3:
-
+        
+    if message=="2" and self.button2=="Slice Offset -" and self.selected_view==3 and self.button1=="Change Viewer":
     
         print("Button DOWN Pressed, [Operation num.]:",message)
         
@@ -1033,10 +585,10 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)
         
         # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset()) 
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())          
           
           
-    if message=="2" and self.check_view==1: 
+    if message=="3" and self.button3=="Slice Offset +" and self.selected_view==1 and self.button1=="Change Viewer":
         print("Button UP Pressed, [Operation num.]:",message)
         
         # Changing Slice Node Offset 
@@ -1046,7 +598,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Red Slice:",self.red_Slice.GetSliceOffset()) 
         
         
-    if message=="2" and self.check_view==2:  
+    if message=="3" and self.button3=="Slice Offset +" and self.selected_view==2 and self.button1=="Change Viewer": 
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -1057,7 +609,7 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())        
         
        
-    if message=="2" and self.check_view==3:  
+    if message=="3" and self.button3=="Slice Offset +" and self.selected_view==3 and self.button1=="Change Viewer": 
     
         print("Button UP Pressed, [Operation num.]:",message)
         
@@ -1065,8 +617,130 @@ class ArduinoPedalBoardLogic(ScriptedLoadableModuleLogic):
         self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)    
                 
         # Print Slice Node Offset
-        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())  
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
 
+        
+        
+    #
+    # Master Button 2 Configuration + -
+    #
+    
+    
+    if message=="2" and self.button2=="Change Viewer":     
+    
+        # Counter Check Value Increase
+        self.selected_view+=1
+        
+        if self.selected_view==1:   
+            # Set Slice Node from Scene (Red)     
+            self.red_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeRed")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpRedSliceView)
+            
+        if self.selected_view==2:
+            # Set Slice Node from Scene (Yellow)
+            self.yellow_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeYellow")
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpYellowSliceView)
+            
+        if self.selected_view==3:
+            # Set Slice Node from Scene (Green)
+            self.green_Slice = slicer.mrmlScene.GetNodeByID("vtkMRMLSliceNodeGreen")   
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutOneUpGreenSliceView)
+            
+        if self.selected_view==4:
+            # Default LayoutUpView
+            slicer.app.layoutManager().setLayout(slicer.vtkMRMLLayoutNode.SlicerLayoutFourUpView)
+            
+            self.selected_view=0    #Reset Counter Check value 
+                      
+          
+    if message=="1" and self.selected_view==1 and self.button2=="Change Viewer" and self.button1=="Slice Offset +" and self.button3=="Slice Offset -":        
+        print("Button UP Pressed, [Operation num.]:",message)
+                    
+        # Changing Slice Node Offset 
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()+self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())
+        
+        
+    if message=="1" and self.selected_view==2 and self.button2=="Change Viewer" and self.button1=="Slice Offset +" and self.button3=="Slice Offset -":       
+        print("Button UP Pressed, [Operation num.]:",message)
+        
+        # Changing Slice Node Offset 
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()+self.OnSetOffset)   
+        
+        # Print Slice Node Offset
+        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset()) 
+        
+        
+    if message=="1" and self.selected_view==3 and self.button2=="Change Viewer" and self.button1=="Slice Offset +" and self.button3=="Slice Offset -":
+        print("Button UP Pressed, [Operation num.]:",message)
+
+        # Changing Slice Node Offset 
+        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()+self.OnSetOffset)
+        
+        # Print Slice Node Offset
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
+
+    
+    if message=="3" and self.selected_view==1 and self.button2=="Change Viewer" and self.button1=="Slice Offset +" and self.button3=="Slice Offset -":
+        print("Button DOWN Pressed, [Operation num.]:",message)
+            
+        # Changing Slice Node Offset 
+        self.red_Slice.SetSliceOffset(self.red_Slice.GetSliceOffset()-self.OnSetOffset)    
+                    
+        # Print Slice Node Offset
+        print("Offset Red Slice:",self.red_Slice.GetSliceOffset())
+        
+        
+    if message=="3" and self.selected_view==2 and self.button2=="Change Viewer" and self.button1=="Slice Offset +" and self.button3=="Slice Offset -":
+        print("Button DOWN Pressed, [Operation num.]:",message)
+
+        # Changing Slice Node Offset 
+        self.yellow_Slice.SetSliceOffset(self.yellow_Slice.GetSliceOffset()-self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Yellow Slice:",self.yellow_Slice.GetSliceOffset())
+        
+        
+    if message=="3" and self.selected_view==3 and self.button2=="Change Viewer" and self.button1=="Slice Offset +" and self.button3=="Slice Offset -":
+        print("Button DOWN Pressed, [Operation num.]:",message)
+
+        # Changing Slice Node Offset 
+        self.green_Slice.SetSliceOffset(self.green_Slice.GetSliceOffset()-self.OnSetOffset)    
+                
+        # Print Slice Node Offset
+        print("Offset Green Slice:",self.green_Slice.GetSliceOffset())
+    
+    
+    
+    #
+    #Master Button2 Configuration - +
+    #
+    
+    if message=="1" and self.selected_view==1 and self.button2=="Change Viewer" and self.button1=="Slice Offset -" and self.button3=="Slice Offset +":   #Error!!   
+        print("Test Config ok")   
+
+
+    #
+    #Master Button3 Configuration + -
+    #
+    
+    if message=="1" and self.selected_view==1 and self.button1=="Slice Offset +" and self.button2=="Slice Offset -" and self.button3=="Change Viewer":  #Error!!       
+        print("Test Config ok") 
+        
+    
+    #
+    #Master Button3 Configuration - +
+    #
+    
+    if message=="1" and self.selected_view==1 and self.button1=="Slice Offset -" and self.button2=="Slice Offset +" and self.button3=="Change Viewer":  #Error!!       
+        print("Test Config ok")     
+
+
+        
+      
+      
 
   
 class ArduinoPedalBoardTest(ScriptedLoadableModuleTest):
