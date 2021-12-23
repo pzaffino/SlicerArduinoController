@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>243</width>
-    <height>190</height>
+    <height>206</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -50,25 +50,6 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="SetButton1">
-     <property name="text">
-      <string>Button 1</string>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <property name="autoRepeat">
-      <bool>false</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="1">
     <widget class="QComboBox" name="button1_Choice">
      <property name="editable">
@@ -96,13 +77,6 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QPushButton" name="SetButton2">
-     <property name="text">
-      <string>Button 2</string>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="1">
     <widget class="QComboBox" name="button2_Choice">
      <property name="editable">
@@ -128,13 +102,6 @@
        <string>Slice Offset -</string>
       </property>
      </item>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="SetButton3">
-     <property name="text">
-      <string>Button 3</string>
-     </property>
     </widget>
    </item>
    <item row="5" column="1">
@@ -165,6 +132,34 @@
        <string>Slice Offset -</string>
       </property>
      </item>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QPushButton" name="StartButton">
+     <property name="text">
+      <string>Start</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="button1_Label">
+     <property name="text">
+      <string>Button 1</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="button2_Label">
+     <property name="text">
+      <string>Button 3</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="button3_Label">
+     <property name="text">
+      <string>Button 3</string>
+     </property>
     </widget>
    </item>
   </layout>
