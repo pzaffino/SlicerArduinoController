@@ -135,6 +135,8 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
         #Change Button State
         self.ui.StartButton.setEnabled(False)
+        self.ui.StartButton.setStyleSheet("background-color:#008000")
+        self.ui.StartButton.setText("Activated")
         
         # Initialization Buttons
         self.logic.button1="Change Viewer"
@@ -157,6 +159,8 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
         #Change Button State
         self.ui.StartButton.setEnabled(False)
+        self.ui.StartButton.setStyleSheet("background-color:#008000")
+        self.ui.StartButton.setText("Activated")
         
         # Initialization Buttons
         self.logic.button1="Change Viewer"
@@ -185,6 +189,8 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
         #Change Button State
         self.ui.StartButton.setEnabled(False)
+        self.ui.StartButton.setStyleSheet("background-color:#008000")
+        self.ui.StartButton.setText("Activated")
         
         # Initialization Buttons
         self.logic.button1="Slice Offset +"
@@ -208,6 +214,8 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
         #Change Button State
         self.ui.StartButton.setEnabled(False)
+        self.ui.StartButton.setStyleSheet("background-color:#008000")
+        self.ui.StartButton.setText("Activated")
         
         # Initialization Buttons
         self.logic.button1="Slice Offset -"
@@ -231,6 +239,8 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
         #Change Button State
         self.ui.StartButton.setEnabled(False)
+        self.ui.StartButton.setStyleSheet("background-color:#008000")
+        self.ui.StartButton.setText("Activated")
         
         # Initialization Buttons
         self.logic.button1="Slice Offset +"
@@ -254,6 +264,8 @@ class ArduinoPedalBoardWidget(ScriptedLoadableModuleWidget):
         
         #Change Button State
         self.ui.StartButton.setEnabled(False)
+        self.ui.StartButton.setStyleSheet("background-color:#008000")
+        self.ui.StartButton.setText("Activated")
         
         # Initialization Buttons
         self.logic.button1="Slice Offset -"
