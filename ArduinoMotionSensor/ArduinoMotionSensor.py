@@ -21,7 +21,7 @@ class ArduinoMotionSensor(ScriptedLoadableModule):
     self.parent.dependencies = []
     self.parent.contributors = ["Paolo Zaffino (Magna Graecia University of Catanzaro, Italy)", "Virgilio Sabatino (Magna Graecia University of Catanzaro, Italy)",  "Maria Francesca Spadea (Magna Graecia University of Catanzaro, Italy)"]
     self.parent.helpText = """
-    This module allows to connect and transmit/receive data from Arduino board. On top of this users can build applications.
+    This module allows to control the Slice View through gestures using an inexpensive motion sensor compatible with Arduino.
 """
     self.parent.helpText += self.getDefaultModuleDocumentationLink()
     self.parent.acknowledgementText = """ """ # replace with organization, grant and thanks. 
