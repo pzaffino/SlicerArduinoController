@@ -151,7 +151,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="button2_Label">
      <property name="text">
-      <string>Button 3</string>
+      <string>Button 2</string>
      </property>
     </widget>
    </item>
