@@ -74,11 +74,23 @@ Module for 3D Slicer that allows to control the Slice View through gestures usin
 
 “Forward” = Enable Full Screen
 
+“Backward” = Disable Full Screen
+
+
 # ArduinoPedalBoard
 
 Module for 3D Slicer that allows to control the Slice View through a pedealboard connected via Arduino.
 (Module Icon made by Freepik from www.flaticon.com)
 
+## Getting Started
+
+• Connect buttons to Arduino as described in 
+
+• Connect “Arduino” to “3D Slicer” using “Slicer Arduino Controller” extension.
+
+• On “ArduinoPedalBoard” extension in “3D Slicer”, choose the desidered tasks and offset variation and press “Start” button.
+
+• Use the pedalboard for controlling view settings.
 
 
-“Backward” = Disable Full Screen
+
