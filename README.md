@@ -84,7 +84,8 @@ Module for 3D Slicer that allows to control the Slice View through a pedealboard
 
 ## Getting Started
 
-• Connect buttons to Arduino as described in 
+• Connect buttons to Arduino as described in the figure below
+![ArduinoPedalBoard_schematic](https://raw.githubusercontent.com/pzaffino/SlicerArduinoController/master/ArduinoPedalBoard/ArduinoPedalBoarad_schematic.png)
 
 • Connect “Arduino” to “3D Slicer” using “Slicer Arduino Controller” extension.
 
