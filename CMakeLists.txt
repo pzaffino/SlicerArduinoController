@@ -21,6 +21,7 @@ include(${Slicer_USE_FILE})
 # Extension modules
 add_subdirectory(ArduinoConnect)
 add_subdirectory(ArduinoMotionSensor)
+>>>>>>> 542cd5b95665dd16aa7893a3b6b2e79ee8cd7d5f
 ## NEXT_MODULE
 
 #-----------------------------------------------------------------------------
