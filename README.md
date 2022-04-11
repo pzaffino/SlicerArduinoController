@@ -13,6 +13,7 @@ Maria Francesca Spadea (Universita’ degli Studi “Magna Græcia” di Catanza
 
 ### Students
 
+Domenico Leuzzi (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
 Virgilio Sabatino (Universita’ degli Studi “Magna Græcia” di Catanzaro, Italy)
 
 ## How to cite SlicerArduino
@@ -72,5 +73,12 @@ Module for 3D Slicer that allows to control the Slice View through gestures usin
 “Down” = Decrease Offset
 
 “Forward” = Enable Full Screen
+
+# ArduinoPedalBoard
+
+Module for 3D Slicer that allows to control the Slice View through a pedealboard connected via Arduino.
+(Module Icon made by Freepik from www.flaticon.com)
+
+
 
 “Backward” = Disable Full Screen
