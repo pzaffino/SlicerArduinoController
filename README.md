@@ -37,6 +37,9 @@ Give a look at the [demo](https://youtu.be/8R6LfBqHNPY) presented at the [Virtua
 # ArduinoMotionSensor
 
 Module for 3D Slicer that allows to control the Slice View through gestures using an inexpensive motion sensor compatible with Arduino.
+
+[Here](https://youtu.be/h1KTOkB4TMk) a video demonstration.
+
 (Module Icon made by Freepik from www.flaticon.com)
 
 
@@ -80,6 +83,9 @@ Module for 3D Slicer that allows to control the Slice View through gestures usin
 # ArduinoPedalBoard
 
 Module for 3D Slicer that allows to control the Slice View through a pedealboard connected via Arduino.
+
+[Here](https://youtu.be/F_WdKU6zyXg) a video demonstration.
+
 (Module Icon made by Freepik from www.flaticon.com)
 
 ## Getting Started
