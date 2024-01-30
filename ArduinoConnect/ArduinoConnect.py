@@ -33,7 +33,6 @@ class ArduinoAppTemplate():
   """ Template class for writing code on top of Arduino Connector
   """
   def __init__(self):
-
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
 
@@ -110,15 +109,13 @@ class ArduinoPlotter():
 
     self.table.SetNumberOfRows(self.numberOfSamples)
     for i in range(self.numberOfSamples):
-        self.table.SetValue(i, 0, i)
-        self.table.SetValue(i, 1, 0)
+      self.table.SetValue(i, 0, i)
+      self.table.SetValue(i, 1, 0)
 
     self.table.Modified()
 
   def addPointToPlot(self, caller, event):
-
     if self.active:
-
       # Only float data type can be plot
       try:
         messageFloat = float(self.ArduinoNode.GetParameter("Data"))
@@ -255,29 +252,29 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     # clicked connect and the device list has elements
     if toggle and self.ui.portSelectorComboBox.currentText != "":
 
-        self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,
-                                            self.ui.baudSelectorComboBox.currentText,
-                                            self.ui.samplesPerSecondText.text)
+      self.connected = self.logic.connect(self.ui.portSelectorComboBox.currentText,
+                                          self.ui.baudSelectorComboBox.currentText,
+                                          self.ui.samplesPerSecondText.text)
 
-        if self.connected:
-          self.ui.connectButton.setText("Disconnect")
-          self.ui.connectButton.setStyleSheet("background-color:#ff0000")
-          self.ui.portSelectorComboBox.setEnabled(False)
-          self.ui.baudSelectorComboBox.setEnabled(False)
-          self.ui.detectDevice.setEnabled(False)
-          self.ui.sendButton.setEnabled(True)
-          self.ui.samplesPerSecondText.setEnabled(False)
-        else:
-          deviceError("Device not found", "Impssible to connect the selected device.", "critical")
-          self.ui.connectButton.setChecked(False)
-          self.ui.connectButton.setText("Connect")
-          self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
+      if self.connected:
+        self.ui.connectButton.setText("Disconnect")
+        self.ui.connectButton.setStyleSheet("background-color:#ff0000")
+        self.ui.portSelectorComboBox.setEnabled(False)
+        self.ui.baudSelectorComboBox.setEnabled(False)
+        self.ui.detectDevice.setEnabled(False)
+        self.ui.sendButton.setEnabled(True)
+        self.ui.samplesPerSecondText.setEnabled(False)
+      else:
+        deviceError("Device not found", "Impssible to connect the selected device.", "critical")
+        self.ui.connectButton.setChecked(False)
+        self.ui.connectButton.setText("Connect")
+        self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
 
     # clicked connect but device list has no elements
     elif toggle and self.ui.portSelectorComboBox.currentText == "":
-        deviceError("Ports scan", "Any device has been set!", "warning")
-        self.ui.connectButton.setChecked(False)
-        return
+      deviceError("Ports scan", "Any device has been set!", "warning")
+      self.ui.connectButton.setChecked(False)
+      return
 
     # clicked disconnect with a running connection
     elif not toggle and self.logic.arduinoConnection is not None and self.connected:
@@ -298,10 +295,10 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
 
     if len(devices)==0:
-        deviceError("Ports scan", "Any device has been found!", "warning")
+      deviceError("Ports scan", "Any device has been found!", "warning")
     elif len(devices)>0:
-        for device in devices:
-            self.ui.portSelectorComboBox.addItem(device)
+      for device in devices:
+        self.ui.portSelectorComboBox.addItem(device)
 
   def onSetIDEButton(self, clicked):
     dialog = qt.QFileDialog()
@@ -341,7 +338,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     if self.plotter is not None and samplesToPlot > 0:
       self.plotter.numberOfSamples = samplesToPlot
       self.plotter.initializeTable()
- 
+
 #
 # ArduinoConnectLogic
 #
@@ -357,68 +354,65 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   """
 
   def __init__(self):
-      ScriptedLoadableModuleLogic.__init__(self)
+    ScriptedLoadableModuleLogic.__init__(self)
 
-      import serial
+    import serial
 
-      self.parameterNode=slicer.vtkMRMLScriptedModuleNode()
-      self.parameterNode.SetName("arduinoNode")
-      slicer.mrmlScene.AddNode(self.parameterNode)
+    self.parameterNode=slicer.vtkMRMLScriptedModuleNode()
+    self.parameterNode.SetName("arduinoNode")
+    slicer.mrmlScene.AddNode(self.parameterNode)
 
-      self.arduinoConnection = None
+    self.arduinoConnection = None
 
   def sendMessage(self, messageToSend):
-      #print(messageToSend)
-      if self.arduinoConnection is not None:
-        self.arduinoConnection.write(str.encode(messageToSend))
-        return True
-      else:
-        return False
+    if self.arduinoConnection is not None:
+      self.arduinoConnection.write(str.encode(messageToSend))
+      return True
+    else:
+      return False
 
   def connect(self, port, baud, samplesPerSecond):
-      self.arduinoEndOfLine = '\n'
-      self.arduinoRefreshRateFps = float(samplesPerSecond)
+    self.arduinoEndOfLine = '\n'
+    self.arduinoRefreshRateFps = float(samplesPerSecond)
 
-      try:
-        self.arduinoConnection = serial.Serial(port, baud)
-      except serial.serialutil.SerialException:
-        return False
+    try:
+      self.arduinoConnection = serial.Serial(port, baud)
+    except serial.serialutil.SerialException:
+      return False
 
-      qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-      return True
+    qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+    return True
 
   def disconnect(self):
-      self.arduinoConnection.close()
-      self.arduinoConnection = None
+    self.arduinoConnection.close()
+    self.arduinoConnection = None
 
   def pollSerialDevice(self):
+    if self.arduinoConnection is None:
+      return
 
-      if self.arduinoConnection is None:
-        return
+    try:
+        if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
+          qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+        elif self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting > 0: # Some messages from arduino
+          arduinoReceiveBuffer = self.arduinoConnection.readline().decode('ascii')
+          if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
+            message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
+            message = self.processMessage(message)
+            if len(message) >= 1:
+              # Fire a message even if the message is unchanged
+              if message == self.parameterNode.GetParameter("Data"):
+                self.parameterNode.Modified()
+              else:
+                self.parameterNode.SetParameter("Data", message)
 
-      try:
-          if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
-              qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-          elif self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting > 0: # Some messages from arduino
-              arduinoReceiveBuffer = self.arduinoConnection.readline().decode('ascii')
-              if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
-                  message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
-                  message = self.processMessage(message)
-                  if len(message) >= 1:
-
-                      # Fire a message even if the message is unchanged
-                      if message == self.parameterNode.GetParameter("Data"):
-                        self.parameterNode.Modified()
-                      else:
-                        self.parameterNode.SetParameter("Data", message)
-
-              qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-      except IOError:
-        self.disconnect()
-        deviceError("Critical error", "Connection has dropped!", "critical")
+            qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+    except IOError:
+      self.disconnect()
+      deviceError("Critical error", "Connection has dropped!", "critical")
 
   def processMessage(self, msg):
-      return msg
+    return msg
 
 
 class ArduinoConnectTest(ScriptedLoadableModuleTest):
