@@ -14,6 +14,17 @@ except ModuleNotFoundError:
   import serial
   import serial.tools.list_ports
 
+
+def deviceError(title, message, error_type="warning"):
+    deviceMBox = qt.QMessageBox()
+    if error_type == "warning":
+      deviceMBox.setIcon(qt.QMessageBox().Warning)
+    elif error_type == "critical":
+      deviceMBox.setIcon(qt.QMessageBox().Critical)
+    deviceMBox.setWindowTitle(title)
+    deviceMBox.setText(message)
+    deviceMBox.exec()
+
 #
 # ArduinoAppTemplate
 #
@@ -257,14 +268,14 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
           self.ui.sendButton.setEnabled(True)
           self.ui.samplesPerSecondText.setEnabled(False)
         else:
-          self.deviceError("Device not found", "Impssible to connect the selected device.", "critical")
+          deviceError("Device not found", "Impssible to connect the selected device.", "critical")
           self.ui.connectButton.setChecked(False)
           self.ui.connectButton.setText("Connect")
           self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
 
     # clicked connect but device list has no elements
     elif toggle and self.ui.portSelectorComboBox.currentText == "":
-        self.deviceError("Ports scan", "Any device has been set!", "warning")
+        deviceError("Ports scan", "Any device has been set!", "warning")
         self.ui.connectButton.setChecked(False)
         return
 
@@ -287,7 +298,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     devices = [port.device for port in serial.tools.list_ports.comports() if port[2] != 'n/a']
 
     if len(devices)==0:
-        self.deviceError("Ports scan", "Any device has been found!", "warning")
+        deviceError("Ports scan", "Any device has been found!", "warning")
     elif len(devices)>0:
         for device in devices:
             self.ui.portSelectorComboBox.addItem(device)
@@ -330,17 +341,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     if self.plotter is not None and samplesToPlot > 0:
       self.plotter.numberOfSamples = samplesToPlot
       self.plotter.initializeTable()
-
-  def deviceError(self, title, message, error_type="warning"):
-    deviceMBox = qt.QMessageBox()
-    if error_type == "warning":
-      deviceMBox.setIcon(qt.QMessageBox().Warning)
-    elif error_type == "critical":
-      deviceMBox.setIcon(qt.QMessageBox().Critical)
-    deviceMBox.setWindowTitle(title)
-    deviceMBox.setText(message)
-    deviceMBox.exec()
-
+ 
 #
 # ArduinoConnectLogic
 #
@@ -395,22 +396,26 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       if self.arduinoConnection is None:
         return
 
-      if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
-          qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-      elif self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting > 0: # Some messages from arduino
-          arduinoReceiveBuffer = self.arduinoConnection.readline().decode('ascii')
-          if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
-              message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
-              message = self.processMessage(message)
-              if len(message) >= 1:
+      try:
+          if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
+              qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+          elif self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting > 0: # Some messages from arduino
+              arduinoReceiveBuffer = self.arduinoConnection.readline().decode('ascii')
+              if self.arduinoEndOfLine in arduinoReceiveBuffer: # Valid message
+                  message = arduinoReceiveBuffer.split(self.arduinoEndOfLine)[0]
+                  message = self.processMessage(message)
+                  if len(message) >= 1:
 
-                  # Fire a message even if the message is unchanged
-                  if message == self.parameterNode.GetParameter("Data"):
-                    self.parameterNode.Modified()
-                  else:
-                    self.parameterNode.SetParameter("Data", message)
+                      # Fire a message even if the message is unchanged
+                      if message == self.parameterNode.GetParameter("Data"):
+                        self.parameterNode.Modified()
+                      else:
+                        self.parameterNode.SetParameter("Data", message)
 
-          qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+              qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+      except IOError:
+        self.disconnect()
+        deviceError("Critical error", "Connection has dropped!", "critical")
 
   def processMessage(self, msg):
       return msg
