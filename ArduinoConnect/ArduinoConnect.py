@@ -363,6 +363,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     slicer.mrmlScene.AddNode(self.parameterNode)
 
     self.arduinoConnection = None
+    self.disconnectedByUser = True
 
   def sendMessage(self, messageToSend):
     if self.arduinoConnection is not None:
@@ -371,12 +372,18 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     else:
       return False
 
-  def connect(self, port, baud, samplesPerSecond):
+  def connect(self, port=None, baud=None, samplesPerSecond=None):
+
+    if port is not None and baud is not None and samplesPerSecond is not None:
+      self.port = port
+      self.baud = baud
+      self.samplesPerSecond = samplesPerSecond
+
     self.arduinoEndOfLine = '\n'
-    self.arduinoRefreshRateFps = float(samplesPerSecond)
+    self.arduinoRefreshRateFps = float(self.samplesPerSecond)
 
     try:
-      self.arduinoConnection = serial.Serial(port, baud)
+      self.arduinoConnection = serial.Serial(self.port, self.baud)
     except serial.serialutil.SerialException:
       return False
 
@@ -384,13 +391,11 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     return True
 
   def disconnect(self):
-    self.arduinoConnection.close()
-    self.arduinoConnection = None
+    if self.arduinoConnection is not None:
+      self.arduinoConnection.close()
+      self.arduinoConnection = None
 
   def pollSerialDevice(self):
-    if self.arduinoConnection is None:
-      return
-
     try:
         if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
@@ -407,9 +412,13 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
                 self.parameterNode.SetParameter("Data", message)
 
             qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-    except IOError:
+    except (IOError, AttributeError):
       self.disconnect()
-      deviceError("Critical error", "Connection has dropped!", "critical")
+      deviceError("Critical error", "Connection has dropped!\nClick OK to try connect again", "critical")
+      reconnected = self.connect()
+
+      if not reconnected:
+        qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
   def processMessage(self, msg):
     return msg
