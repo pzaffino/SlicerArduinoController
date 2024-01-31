@@ -25,6 +25,19 @@ def deviceError(title, message, error_type="warning"):
     deviceMBox.setText(message)
     deviceMBox.exec()
 
+def connectionError():
+    connectionMBox = qt.QMessageBox()
+    connectionMBox.setIcon(qt.QMessageBox().Critical)
+    connectionMBox.setWindowTitle("Connection dropped!")
+    connectionMBox.setText("Do you want to try reconnecting?")
+    connectionMBox.setStandardButtons(qt.QMessageBox.Yes)
+    connectionMBox.addButton(qt.QMessageBox.No)
+    connectionMBox.setDefaultButton(qt.QMessageBox.Yes)
+    if connectionMBox.exec() == qt.QMessageBox.Yes:
+      return True
+    else:
+      return False
+
 #
 # ArduinoAppTemplate
 #
@@ -363,7 +376,6 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     slicer.mrmlScene.AddNode(self.parameterNode)
 
     self.arduinoConnection = None
-    self.disconnectedByUser = False
 
   def sendMessage(self, messageToSend):
     if self.arduinoConnection is not None:
@@ -384,6 +396,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
     try:
       self.arduinoConnection = serial.Serial(self.port, self.baud)
+      self.disconnectedByUser = False
     except serial.serialutil.SerialException:
       return False
 
@@ -419,11 +432,12 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     except (IOError, AttributeError):
       self.disconnect(disconnectedByUser=False)
 
-      deviceError("Critical error", "Connection has dropped!\nClick OK to try connect again", "critical")
-      reconnected = self.connect()
+      userWantsToReconnect = connectionError()
+      if userWantsToReconnect:
+        reconnected = self.connect()
 
-      if not reconnected:
-        qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+        if not reconnected:
+          qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
 
   def processMessage(self, msg):
     return msg
