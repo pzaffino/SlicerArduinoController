@@ -278,7 +278,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
 
     # clicked disconnect with a running connection
     elif not toggle and self.logic.arduinoConnection is not None and self.connected:
-      self.logic.disconnect()
+      self.logic.disconnect(disconnectedByUser=True)
       self.ui.connectButton.setText("Connect")
       self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
       self.ui.portSelectorComboBox.setEnabled(True)
@@ -363,7 +363,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     slicer.mrmlScene.AddNode(self.parameterNode)
 
     self.arduinoConnection = None
-    self.disconnectedByUser = True
+    self.disconnectedByUser = False
 
   def sendMessage(self, messageToSend):
     if self.arduinoConnection is not None:
@@ -390,12 +390,15 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
     return True
 
-  def disconnect(self):
-    if self.arduinoConnection is not None:
+  def disconnect(self, disconnectedByUser):
+    if disconnectedByUser:
       self.arduinoConnection.close()
-      self.arduinoConnection = None
+    self.disconnectedByUser = disconnectedByUser
+    self.arduinoConnection = None
 
   def pollSerialDevice(self):
+    if self.disconnectedByUser:
+      return
     try:
         if self.arduinoConnection.isOpen() and self.arduinoConnection.in_waiting == 0: # No messages from arduino
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
@@ -412,8 +415,10 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
                 self.parameterNode.SetParameter("Data", message)
 
             qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+
     except (IOError, AttributeError):
-      self.disconnect()
+      self.disconnect(disconnectedByUser=False)
+
       deviceError("Critical error", "Connection has dropped!\nClick OK to try connect again", "critical")
       reconnected = self.connect()
 
