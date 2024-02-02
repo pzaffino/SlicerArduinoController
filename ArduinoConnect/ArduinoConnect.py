@@ -216,11 +216,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
 
-    # Add Arduino Node
-    self.parameterNode = slicer.vtkMRMLScriptedModuleNode()
-    self.parameterNode.SetName("arduinoNode")
-    slicer.mrmlScene.AddNode(self.parameterNode)
-
     # Plotter
     self.plotter = None
 
@@ -230,8 +225,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.config = json.load(f)
 
     self.logic = ArduinoConnectLogic()
-    connectionDropErrorObserverTag = self.parameterNode.AddObserver("EndEvent", self.onConnectionEndEvent)
-    connectionDropErrorObserverTag = self.parameterNode.AddObserver("StartEvent", self.onConnectionStartEvent)
+    connectionDropErrorObserverTag = self.logic.parameterNode.AddObserver("EndEvent", self.onConnectionEndEvent)
+    connectionDropErrorObserverTag = self.logic.parameterNode.AddObserver("StartEvent", self.onConnectionStartEvent)
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
@@ -405,9 +400,11 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
   def __init__(self):
     ScriptedLoadableModuleLogic.__init__(self)
 
-    import serial
+    # Add Arduino Node
+    self.parameterNode = slicer.vtkMRMLScriptedModuleNode()
+    self.parameterNode.SetName("arduinoNode")
+    slicer.mrmlScene.AddNode(self.parameterNode)
 
-    self.parameterNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     self.arduinoConnection = None
 
   def sendMessage(self, messageToSend):
