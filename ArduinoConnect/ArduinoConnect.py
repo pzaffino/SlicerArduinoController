@@ -29,7 +29,7 @@ def connectionError():
     connectionMBox = qt.QMessageBox()
     connectionMBox.setIcon(qt.QMessageBox().Critical)
     connectionMBox.setWindowTitle("Connection dropped!")
-    connectionMBox.setText("Do you want to try reconnecting?")
+    connectionMBox.setText("Do you want to try to reconnect?")
     connectionMBox.setStandardButtons(qt.QMessageBox.Yes)
     connectionMBox.addButton(qt.QMessageBox.No)
     connectionMBox.setDefaultButton(qt.QMessageBox.Yes)
