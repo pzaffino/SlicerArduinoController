@@ -207,6 +207,11 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
   def setup(self):
     ScriptedLoadableModuleWidget.setup(self)
 
+    # Add Arduino Node
+    self.parameterNode = slicer.vtkMRMLScriptedModuleNode()
+    self.parameterNode.SetName("arduinoNode")
+    slicer.mrmlScene.AddNode(self.parameterNode)
+
     # Plotter
     self.plotter = None
 
@@ -216,6 +221,7 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.config = json.load(f)
 
     self.logic = ArduinoConnectLogic()
+    connectionDropErrorObserverTag = self.parameterNode.AddObserver("ErrorEvent", self.onConnectionDropErrorEvent)
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
@@ -259,6 +265,16 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       return ""
     else:
       return arduinoIDEExe
+
+  def onConnectionDropErrorEvent(self, *argv):
+    self.ui.connectButton.setText("Connect")
+    self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
+    self.ui.connectButton.setChecked(False)
+    self.ui.portSelectorComboBox.setEnabled(True)
+    self.ui.baudSelectorComboBox.setEnabled(True)
+    self.ui.detectDevice.setEnabled(True)
+    self.ui.sendButton.setEnabled(False)
+    self.ui.samplesPerSecondText.setEnabled(True)
 
   def onConnectButton(self, toggle):
 
@@ -371,10 +387,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
     import serial
 
-    self.parameterNode=slicer.vtkMRMLScriptedModuleNode()
-    self.parameterNode.SetName("arduinoNode")
-    slicer.mrmlScene.AddNode(self.parameterNode)
-
+    self.parameterNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
     self.arduinoConnection = None
 
   def sendMessage(self, messageToSend):
@@ -431,6 +444,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
     except (IOError, AttributeError):
       self.disconnect(disconnectedByUser=False)
+      self.parameterNode.InvokeEvent("ErrorEvent")
 
       userWantsToReconnect = connectionError()
       if userWantsToReconnect:
