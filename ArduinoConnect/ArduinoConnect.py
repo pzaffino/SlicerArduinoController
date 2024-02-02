@@ -47,11 +47,20 @@ class ArduinoAppTemplate():
   """
   def __init__(self):
     self.ArduinoNode = slicer.mrmlScene.GetFirstNodeByName("arduinoNode")
+
+    # Observe ModifiedEvent to be informed when new data arrived from the board
     sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ModifiedEvent, self.doSomethingWhenNewDataIsRead)
+
+    # Observe ErrorEvent to be informed when connection dropped
+    sceneModifiedObserverTag = self.ArduinoNode.AddObserver(vtk.vtkCommand.ErrorEvent, self.doSomethingWhenConnectionDrops)
 
   def doSomethingWhenNewDataIsRead(self, caller, event):
     #EXAMPLE TO PRINT THE RECEIVED VALUE:
     print("FIRED! %s" % (self.ArduinoNode.GetParameter("Data")))
+
+  def doSomethingWhenConnectionDrops(self, caller, event):
+    #EXAMPLE TO PRINT THE CONNECTION ERROR:
+    print("CONNECTION DROPPED!")
 
   def sendDataToArduino(self, message):
     messageSent = slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage(message)
