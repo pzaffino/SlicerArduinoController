@@ -221,7 +221,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
       self.config = json.load(f)
 
     self.logic = ArduinoConnectLogic()
-    connectionDropErrorObserverTag = self.parameterNode.AddObserver("ErrorEvent", self.onConnectionDropErrorEvent)
+    connectionDropErrorObserverTag = self.parameterNode.AddObserver("EndEvent", self.onConnectionEndEvent)
+    connectionDropErrorObserverTag = self.parameterNode.AddObserver("StartEvent", self.onConnectionStartEvent)
 
     # Load widget from .ui file (created by Qt Designer)
     uiWidget = slicer.util.loadUI(self.resourcePath('UI/ArduinoConnect.ui'))
@@ -266,7 +267,17 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     else:
       return arduinoIDEExe
 
-  def onConnectionDropErrorEvent(self, *argv):
+  def onConnectionStartEvent(self, *argv):
+    self.ui.connectButton.setText("Disconnect")
+    self.ui.connectButton.setStyleSheet("background-color:#ff0000")
+    self.ui.connectButton.setChecked(True)
+    self.ui.portSelectorComboBox.setEnabled(False)
+    self.ui.baudSelectorComboBox.setEnabled(False)
+    self.ui.detectDevice.setEnabled(False)
+    self.ui.sendButton.setEnabled(True)
+    self.ui.samplesPerSecondText.setEnabled(False)
+
+  def onConnectionEndEvent(self, *argv):
     self.ui.connectButton.setText("Connect")
     self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
     self.ui.connectButton.setChecked(False)
@@ -444,6 +455,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
     except (IOError, AttributeError):
       self.disconnect(disconnectedByUser=False)
+      self.parameterNode.InvokeEvent("EndEvent")
       self.parameterNode.InvokeEvent("ErrorEvent")
 
       userWantsToReconnect = connectionError()
@@ -452,6 +464,8 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
         if not reconnected:
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+        else:
+          self.parameterNode.InvokeEvent("StartEvent")
 
   def processMessage(self, msg):
     return msg
