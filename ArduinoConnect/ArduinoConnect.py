@@ -300,16 +300,8 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
                                           self.ui.baudSelectorComboBox.currentText,
                                           self.ui.samplesPerSecondText.text)
 
-      if self.connected:
-        self.ui.connectButton.setText("Disconnect")
-        self.ui.connectButton.setStyleSheet("background-color:#ff0000")
-        self.ui.portSelectorComboBox.setEnabled(False)
-        self.ui.baudSelectorComboBox.setEnabled(False)
-        self.ui.detectDevice.setEnabled(False)
-        self.ui.sendButton.setEnabled(True)
-        self.ui.samplesPerSecondText.setEnabled(False)
-      else:
-        deviceError("Device not found", "Impssible to connect the selected device.", "critical")
+      if not self.connected:
+        deviceError("Device not found", "Impossible to connect the selected device.", "critical")
         self.ui.connectButton.setChecked(False)
         self.ui.connectButton.setText("Connect")
         self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
@@ -323,13 +315,6 @@ class ArduinoConnectWidget(ScriptedLoadableModuleWidget):
     # clicked disconnect with a running connection
     elif not toggle and self.logic.arduinoConnection is not None and self.connected:
       self.logic.disconnect(disconnectedByUser=True)
-      self.ui.connectButton.setText("Connect")
-      self.ui.connectButton.setStyleSheet("background-color:#f1f1f1;")
-      self.ui.portSelectorComboBox.setEnabled(True)
-      self.ui.baudSelectorComboBox.setEnabled(True)
-      self.ui.detectDevice.setEnabled(True)
-      self.ui.sendButton.setEnabled(False)
-      self.ui.samplesPerSecondText.setEnabled(True)
 
   def onDetectDeviceButton(self, clicked):
 
@@ -431,6 +416,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       return False
 
     qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
+    self.parameterNode.InvokeEvent("StartEvent")
     return True
 
   def disconnect(self, disconnectedByUser):
@@ -438,6 +424,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       self.arduinoConnection.close()
     self.disconnectedByUser = disconnectedByUser
     self.arduinoConnection = None
+    self.parameterNode.InvokeEvent("EndEvent")
 
   def pollSerialDevice(self):
     if self.disconnectedByUser:
@@ -461,7 +448,6 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
     except (IOError, AttributeError):
       self.disconnect(disconnectedByUser=False)
-      self.parameterNode.InvokeEvent("EndEvent")
       self.parameterNode.InvokeEvent("ErrorEvent")
 
       userWantsToReconnect = connectionError()
@@ -470,8 +456,6 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
 
         if not reconnected:
           qt.QTimer.singleShot(1000/self.arduinoRefreshRateFps, self.pollSerialDevice)
-        else:
-          self.parameterNode.InvokeEvent("StartEvent")
 
   def processMessage(self, msg):
     return msg
