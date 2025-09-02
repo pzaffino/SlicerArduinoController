@@ -25,19 +25,6 @@ def deviceError(title, message, error_type="warning"):
     deviceMBox.setText(message)
     deviceMBox.exec()
 
-def connectionError():
-    connectionMBox = qt.QMessageBox()
-    connectionMBox.setIcon(qt.QMessageBox().Critical)
-    connectionMBox.setWindowTitle("Connection dropped!")
-    connectionMBox.setText("Do you want to try to reconnect?")
-    connectionMBox.setStandardButtons(qt.QMessageBox.Yes)
-    connectionMBox.addButton(qt.QMessageBox.No)
-    connectionMBox.setDefaultButton(qt.QMessageBox.Yes)
-    if connectionMBox.exec() == qt.QMessageBox.Yes:
-      return True
-    else:
-      return False
-
 #
 # ArduinoAppTemplate
 #
@@ -391,6 +378,32 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
     slicer.mrmlScene.AddNode(self.parameterNode)
 
     self.arduinoConnection = None
+    self.counterConnectionErrorWindows = 0
+
+  #def connectionError(self, caller=None, event=None):
+  def connectionError(self):
+    if hasattr(self, "errorBox") and self.errorBox is not None: # Window already open
+        return
+
+    self.errorBox = qt.QMessageBox(slicer.util.mainWindow())
+    self.errorBox.setIcon(qt.QMessageBox().Critical)
+    self.errorBox.setWindowTitle("Connection dropped!")
+    self.errorBox.setText("Do you want to try to reconnect?")
+    self.errorBox.setStandardButtons(qt.QMessageBox.Yes)
+    self.errorBox.addButton(qt.QMessageBox.No)
+    self.errorBox.setDefaultButton(qt.QMessageBox.Yes)
+
+    # When closed, reset handler
+    self.errorBox.finished.connect(self._clearErrorBox)
+
+    if self.errorBox.exec() == qt.QMessageBox.Yes:
+      return True
+    else:
+      return False
+
+  def _clearErrorBox(self, result):
+    self.errorBox.deleteLater()
+    self.errorBox = None
 
   def sendMessage(self, messageToSend):
     if self.arduinoConnection is not None:
@@ -450,7 +463,7 @@ class ArduinoConnectLogic(ScriptedLoadableModuleLogic):
       self.disconnect(disconnectedByUser=False)
       self.parameterNode.InvokeEvent("ErrorEvent")
 
-      userWantsToReconnect = connectionError()
+      userWantsToReconnect = self.connectionError()
       if userWantsToReconnect:
         reconnected = self.connect()
 
