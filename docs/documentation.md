@@ -58,3 +58,12 @@ class ArduinoAppTemplate():
   def sendDataToArduino(self, message):
     messageSent = slicer.modules.arduinoconnect.widgetRepresentation().self().logic.sendMessage(message)
 ```
+
+## Invoked events
+
+The Arduino node triggers four different types of VTK events, depending on the situation:
+
+ * **vtk.vtkCommand.StartEvent** (when the connection starts)
+ * **vtk.vtkCommand.EndEvent** (when the connection is closed)
+ * **vtk.vtkCommand.ModifiedEvent** (when new data is received from the board)
+ * **vtk.vtkCommand.ErrorEvent** (when the connection drops)
